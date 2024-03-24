@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{::title}, ~{::#css}, ~{::#content}, ~{::#js})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogs List</title>
+    <th:block id="css"></th:block>
+</head>
+<body>
+    <th:block id="content">
+        <!-- Blogs List -->
+        <section class="py-4">
+            <div class="container">
+                <a class="link-offset-2 link-underline link-underline-opacity-0 text-dark" th:href="@{/blogs}">
+                    <h3 class="mb-3">Blogs</h3>
+                </a>
+                <div class="row">
+                    <th:block th:each="blog : ${pageData.getContent()}">
+                        <th:block th:replace="~{web/fragments/blog :: blog-item(${blog})}"></th:block>
+                    </th:block>
+                </div>
+            </div>
+        </section>
+
+        <!-- Switch page -->
+        <div class="d-flex justify-content-center mt-4" id="pagination" th:if="${pageData.getTotalPages() > 1}">
+            <nav aria-label="...">
+                <ul class="pagination">
+
+                    <!-- Previous Button -->
+                    <li class="page-item" th:classappend="${currentPage == 1 ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{/blogs (page=${currentPage - 1})}"><i>Previous Page</i></a>
+                    </li>
+
+                    <!-- Using Sequence to scan page from 1 to totalPages -->
+                    <li class="page-item"
+                        th:each="pageNumber : ${#numbers.sequence(1, pageData.getTotalPages())}"
+                        th:classappend="${pageNumber == currentPage ? 'active' : ''}">
+                        <a class="page-link" th:href="@{/blogs (page=${pageNumber})}" th:text="${pageNumber}">1</a>
+                    </li>
+
+                    <!-- Next Button -->
+                    <li class="page-item" th:classappend="${currentPage == pageData.getTotalPages() ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{/blogs (page=${currentPage + 1})}"><i>Next Page</i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </th:block>
+
+    <th:block id="js"></th:block>
+</body>
+</html>

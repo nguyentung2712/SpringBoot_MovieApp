@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{::title}, ~{::#css}, ~{::#content}, ~{::#js})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <th:block id="css">
+        <!-- Slider CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+              integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+              integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    </th:block>
+</head>
+<body>
+    <th:block id="content">
+        <!-- Hot Movies -->
+        <section class="py-4">
+            <div class="container">
+                <h3 class="mb-3">Hot Movies</h3>
+                <div class="row">
+
+                    <!-- list hot movies -->
+                    <div class="col-3" th:each="movie : ${listHotMovies}">
+                        <div class="movie-item">
+                            <a th:href="@{/movie/{id}/{slug} (id=${movie.id}, slug=${movie.slug})}">
+                                <div class="movie-poster rounded overflow-hidden">
+                                    <img class="rounded w-100 h-100" th:src="${movie.poster}" th:alt="${movie.title}"></div>
+                            </a>
+                            <p class="mt-2" th:text="${movie.title}"></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Single Movies -->
+        <section class="py-4">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="mb-3">Newly Updated Single Movies</h3>
+                    <a th:href="@{/singleMovies}" class="text-primary text-decoration-none">Watch more</a>
+                </div>
+
+                <!-- list single movies -->
+                <div class="row">
+                    <th:block th:each="movie : ${listSingleMovies}">
+                        <th:block th:replace="~{web/fragments/movie :: movie-item(${movie})}"></th:block>
+                    </th:block>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Series Movies -->
+        <section class="py-4">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="mb-3">Newly Updated Series Movies</h3>
+                    <a th:href="@{/seriesMovies}" class="text-primary text-decoration-none">Watch more</a>
+                </div>
+
+                <!-- list series movies -->
+                <div class="row">
+                    <th:block th:each="movie : ${listSeriesMovies}">
+                        <th:block th:replace="~{web/fragments/movie :: movie-item(${movie})}"></th:block>
+                    </th:block>
+                </div>
+            </div>
+        </section>
+
+        <!-- Theater Movies -->
+        <section class="py-4">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="mb-3">Newly Updated Theater Movies</h3>
+                    <a th:href="@{/theaterMovies}" class="text-primary text-decoration-none">Watch more</a>
+                </div>
+
+                <!-- list theater movies -->
+                <div class="row">
+                    <th:block th:each="movie : ${listTheaterMovies}">
+                        <th:block th:replace="~{web/fragments/movie :: movie-item(${movie})}"></th:block>
+                    </th:block>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog -->
+        <section class="py-4">
+            <div class="container">
+                <a class="link-offset-2 link-underline link-underline-opacity-0 text-dark" th:href="@{/blogs}">
+                    <h3 class="mb-3">Blog</h3>
+                </a>
+                <div class="row">
+                    <th:block th:each="blog : ${listBlogs}">
+                        <th:block th:replace="~{web/fragments/blog :: blog-item(${blog})}"></th:block>
+                    </th:block>
+                </div>
+
+            </div>
+        </section>
+
+    </th:block>
+
+    <th:block id="js">
+        <!-- Slider JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+                integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script>
+            $(document).ready(function () {
+                $(".movie-list").owlCarousel({
+                    items: 4,
+                    margin: 20,
+                    loop: true
+                });
+            });
+        </script>
+    </th:block>
+</body>
+</html>

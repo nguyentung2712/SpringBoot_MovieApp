@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <div class="col-6" th:fragment="blog-item(blog)">
+        <a class="link-offset-2 link-underline link-underline-opacity-0 text-dark" th:href="@{/blog/{id}/{slug} (id=${blog.id}, slug=${blog.slug})}">
+            <div class="blog-item bg-body-tertiary p-3 rounded mb-4">
+                <h5 th:text="${blog.title}"></h5>
+                <p class="fst-italic" th:text="${blog.publishedAt}"></p>
+                <p th:text="${blog.content}"></p>
+            </div>
+        </a>
+    </div>
+
+</body>
+</html>

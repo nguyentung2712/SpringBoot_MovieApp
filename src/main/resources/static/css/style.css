@@ -1,0 +1,44 @@
+/* all img website */
+img {
+    max-width: 100%;
+}
+
+/* icon website img */
+.logo , .col-4 img{
+    width: 220px;
+}
+
+/* poster detail movie img */
+.col-3 img {
+    object-fit: cover;
+}
+
+/* user avatar img */
+.rating-avatar img{
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* rating star */
+.rating {
+    font-size: 24px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.star {
+    display: inline-block;
+}
+
+.star:hover,
+.star.active,
+.rating-icon {
+    color: gold;
+}
+
+/* main menu */
+#main-menu .navbar-nav a.active {
+    color: #ff6901 !important;
+}

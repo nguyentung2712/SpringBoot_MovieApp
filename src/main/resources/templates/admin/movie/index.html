@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{admin/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: .content-wrapper}, ~{:: #js})}">
+
+<head>
+    <title>All Movies</title>
+
+    <th:block id="css"></th:block>
+</head>
+
+<body>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a>Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            List Movie
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row py-2">
+                <div class="col-12">
+                    <a href="/admin/movies/create" type="button" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add movie
+                    </a>
+                    <a href="/admin/movies" type="button" class="btn btn-info">
+                        <i class="fas fa-redo"></i> Refresh
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <table id="table-blog" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Poster</th>
+                                    <th>Title</th>
+                                    <th>Type</th>
+                                    <th>Release Year</th>
+                                    <th>Genre</th>
+                                    <th>View</th>
+                                    <th>Rating</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="movie : ${movieList}">
+                                    <!-- Poster -->
+                                    <td>
+                                        <img th:src="${movie.poster}">
+                                    </td>
+
+                                    <!-- Title -->
+                                    <td>
+                                        <a th:href="@{/admin/movies/{id}/detail (id=${movie.id})}"
+                                           th:text="${movie.title}"></a>
+                                    </td>
+
+                                    <!-- Type -->
+                                    <td th:text="${movie.type}"></td>
+
+                                    <!-- Release Year -->
+                                    <td th:text="${movie.releaseYear}"></td>
+
+                                    <!-- Genres -->
+                                    <td>
+                                        <span class="badge bg-info mr-1" th:each="genre : ${movie.genres}" th:text="${genre.name}"></span>
+                                    </td>
+
+                                    <!-- View -->
+                                    <td th:text="${movie.view == null ? 0 : #numbers.formatInteger(movie.view,3,'COMMA')}"></td>
+
+                                    <!-- Rating -->
+                                    <td>
+                                        <span th:text="${movie.rating == null ? 0 : movie.rating}"></span>
+                                        <span style="color: #EDBB0E"><i class="fas fa-star"></i></span>
+                                    </td>
+
+                                    <!-- Status -->
+                                    <td>
+                                        <span class="badge" th:text="${movie.status ? 'Public' : 'Draft'}"
+                                              th:classappend="${movie.status ? 'bg-success' : 'bg-secondary'}"></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<th:block id="js">
+    <script th:inline="javascript">
+        $('#table-blog').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    </script>
+</th:block>
+</body>

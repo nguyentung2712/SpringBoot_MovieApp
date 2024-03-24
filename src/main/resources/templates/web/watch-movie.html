@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{::title}, ~{::#css}, ~{::#content}, ~{::#js})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${movie.title}"></title>
+
+    <th:block id="css"></th:block>
+</head>
+<body>
+<!-- movie detail -->
+<th:block id="content">
+    <section class="py-4">
+        <div class="container">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/}">Home Page</a></li>
+
+                    <!-- check condition type movie -->
+                    <li class="breadcrumb-item" th:switch="${movie.type.value}">
+                        <!-- single movies -->
+                        <a class="text-primary" th:case="'Single Movie'" th:href="@{/singleMovies}">Single Movies</a>
+                        <!-- series movies -->
+                        <a class="text-primary" th:case="'Series Movie'" th:href="@{/seriesMovies}">Series Movies</a>
+                        <!-- theater movies -->
+                        <a class="text-primary" th:case="'Theater Movie'" th:href="@{/theaterMovies}">Theater Movies</a>
+                        <!-- default set up -->
+                        <a class="text-primary" th:case="*" href="#">Unknown</a>
+                    </li>
+
+                    <li class="breadcrumb-item active" aria-current="page" th:text="${movie.title}"></li>
+                </ol>
+            </nav>
+
+            <!-- Video Episode -->
+            <div id="#screen">
+                <video width="100%" controls>
+                    <source th:src="${currentEpisode.videoURL}" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="row mt-4">
+
+                <!-- Movie poster -->
+                <div class="col-3">
+                    <img class="rounded w-100 h-100" th:src="${movie.poster}" th:alt="${movie.slug}">
+                </div>
+
+                <!-- Text note detail about movie -->
+                <div class="col-9">
+                    <h4 class="text-uppercase" th:text="${movie.title}"></h4>
+                    <p class="text-muted" th:text="${movie.title}"></p>
+                    <div class="p-3 bg-body-tertiary">
+                        <!-- check condition that genres,directors,actors more than 1 -->
+                        <p>Genres:
+                            <th:block th:each="genre, state : ${movie.genres}"
+                                      th:text="${state.index < movie.genres.size() - 1 ? genre.name + ', ' : genre.name}"></th:block>
+                        </p>
+                        <p th:text="|Year release: ${movie.releaseYear}|"></p>
+                        <p>Directors:
+                            <th:block th:each="director, state : ${movie.directors}"
+                                      th:text="${state.index < movie.directors.size() - 1 ? director.name + ', ' : director.name}"></th:block>
+                        </p>
+                        <p>Actors:
+                            <th:block th:each="actor, state : ${movie.actors}"
+                                      th:text="${state.index < movie.actors.size() - 1 ? actor.name + ', ' : actor.name}"></th:block>
+                        </p>
+                        <p>
+                            <th:block th:text="${movie.description}"></th:block>
+                            <a href="">Detail...</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Number of episodes -->
+                <div class="mt-4" th:if="${movie.type.toString() == 'PHIM_BO' && episodes.size() > 0}">
+                    <h3 class="mt-3">Episodes</h3>
+                    <a class="btn btn-dark me-2"
+                       th:each="episode : ${episodes}"
+                       th:text="${episode.name}"
+                       th:classappend="${episode.displayOrder == currentEpisode.displayOrder} ? 'bg-danger disabled' : 'btn-dark'"
+                       th:href="@{/watch-movie/{id}/{slug} (id=${movie.id}, slug=${movie.slug}, tap=${episode.displayOrder})}">
+                    </a>
+                </div>
+
+                <div class="mt4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mt-3">Write comment</h3>
+
+                        <!-- if currentUser != null -->
+                        <button type="button" id="btn-open-modal-review" class="btn btn-primary" th:if="${session.currentUser != null}">
+                            Write comment
+                        </button>
+
+                    </div>
+
+                    <!-- if currentUser == null -->
+                    <p th:if="${session.currentUser == null}" >Please <a th:href="@{/login}" class="text-primary text-decoration-underline">log in </a>to write comment</p>
+
+                    <div class="review-list">
+                        <div class="rating-item d-flex align-items-center mb-3" th:each="review : ${reviews}">
+                            <!-- user avatar + user name -->
+                            <div class="rating-avatar">
+                                <img th:src="${review.user.avatar}" th:alt="${review.user.name}">
+                            </div>
+                            <!-- review information -->
+                            <div class="rating-info ms-3">
+                                <!-- username + date created -->
+                                <div class="d-flex align-items-center">
+                                    <p class="rating-name mb-0">
+                                        <strong th:text="${review.user.name}"></strong>
+                                    </p>
+                                    <p class="rating-time mb-0 ms-2 text-muted fts-italic" th:text="${#dates.format(review.updatedAt, 'dd/MM/yyyy')}"></p>
+                                </div>
+                                <!-- rating + rating text -->
+                                <div class="rating-star">
+                                    <p class="mb-0 fw-bold">
+                                        <span class="rating-icon"><i class="fa fa-star"></i></span>
+                                        <span th:text="|${review.rating}/10 ${review.ratingText}|"></span>
+                                    </p>
+                                </div>
+                                <!-- content -->
+                                <div class="rating-content mb-0 mt-1 text-muted" th:text="${review.content}"></div>
+
+                                <!-- button action -->
+                                <!-- check condition that user is the owner of review -->
+                                <div class="rating-action mt-2" th:if="${session.currentUser != null && session.currentUser.id == review.user.id}">
+                                    <!-- edit button -->
+                                    <!-- using 'onclick' function with review.id and modal to handle edit review -->
+                                    <a href="javascript:void(0)" class="text-primary text-decoration-underline me-2" th:onclick="|openModalUpdate(${review.id})|">Edit</a>
+
+                                    <!-- delete button -->
+                                    <!-- using 'onclick' function with review.id to handle delete review -->
+                                    <a href="javascript:void(0)" class="text-danger text-decoration-underline" th:onclick="|deleteReview(${review.id})|">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal create new review-->
+                <div th:if="${session.currentUser != null}" class="modal fade" id="modal-review" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 id="modal-title" class="modal-title">Write content</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div>
+                                    <!-- get movie title -->
+                                    <h5 class="text-center" th:text="${movie.title}"></h5>
+                                    <div class="rating-container my-3 d-flex justify-content-center align-items-center">
+                                        <!-- get star rating -->
+                                        <div class="rating">
+                                        <span class="star" data-rating="1">
+                                           <i class="fa-solid fa-star"></i>
+                                        </span>
+                                            <span class="star" data-rating="2">
+                                           <i class="fa-solid fa-star"></i>
+                                        </span>
+                                            <span class="star" data-rating="3">
+                                           <i class="fa-solid fa-star"></i>
+                                        </span>
+                                            <span class="star" data-rating="4">
+                                           <i class="fa-solid fa-star"></i>
+                                        </span>
+                                            <span class="star" data-rating="5">
+                                           <i class="fa-solid fa-star"></i>
+                                        </span>
+                                            <span class="star" data-rating="6">
+                                           <i class="fa-solid fa-star"></i>
+                                        </span>
+                                            <span class="star" data-rating="7">
+                                           <i class="fa-solid fa-star"></i>
+                                        </span>
+                                            <span class="star" data-rating="8">
+                                           <i class="fa-solid fa-star"></i>
+                                        </span>
+                                            <span class="star" data-rating="9">
+                                           <i class="fa-solid fa-star"></i>
+                                        </span>
+                                            <span class="star" data-rating="10">
+                                           <i class="fa-solid fa-star"></i>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="rating-value" class="text-center fst-italic mt-2"></div>
+                                <div class="mb-3">
+                                    <textarea class="form-control" id="rating-content" rows="5" placeholder="Write content"></textarea>
+                                </div>
+
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <button id="btn-handle-review" type="button" class="btn btn-primary px-5">Up load</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Release movies list -->
+        <section class="py-4">
+            <div class="container">
+                <h3 class="mb-3">Release movies</h3>
+                <div class="row">
+                    <!-- get all release movie -->
+                    <div class="col-2" th:each="movie : ${listReleaseFilm}">
+                        <div class="movie-item">
+                            <!-- get to movie detail page -->
+                            <a th:href="@{/movie/{id}/{slug} (id=${movie.id}, slug=${movie.slug})}" target="_blank">
+                                <!-- get poster and title -->
+                                <div class="movie-poster rounded overflow-hidden">
+                                    <img class="rounded w-100 h-100" th:src="${movie.poster}" th:alt="${movie.title}">
+                                </div>
+                            </a>
+                            <!-- get title -->
+                            <p class="mt-2" th:text="${movie.title}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </section>
+</th:block>
+
+<th:block id="js">
+    <!-- save object information using thymeleaf and javascript -->
+    <script th:inline="javascript">
+        const movie = [[${movie}]];
+        let reviews = [[${reviews}]];
+        const currentUser = [[${session.currentUser}]];
+    </script>
+
+    <!-- Server Javascript -->
+    <script th:if="${session.currentUser != null}" th:src="@{/js/movie-detail-review.js}"></script>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <footer class="bg-dark py-4 text-white">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-6">
+                    <a href="/">
+                        <img src="/image/logo.png" alt="logo" class="logo">
+                    </a>
+                    <p class="mt-2">Mot chill - Watch high-quality Viet sub Online movies for free,
+                        many rich and unique movie genres, intuitive and convenient interface,
+                        fast download speed, regularly updated with new movies.</p>
+                </div>
+
+                <div class="col-2">
+                    <h5 class="text-uppercase mb-3">Category</h5>
+                    <p><a class="text-white" th:href="@{/blogs}">Blog</a></p>
+                    <p><a class="text-white" th:href="@{/theaterMovies}">Theater movies</a></p>
+                    <p><a class="text-white" th:href="@{/seriesMovies}">Series movies</a></p>
+                    <p><a class="text-white" th:href="@{/singleMovies}">Single movies</a></p>
+                    <p><a class="text-white" href="#">TV Show</a></p>
+                </div>
+
+                <div class="col-2">
+                    <h5 class="text-uppercase mb-3">Rules</h5>
+                    <p><a class="text-white" href="#">DMCA</a></p>
+                    <p><a class="text-white" href="#">Contact</a></p>
+                    <p><a class="text-white" href="#">Privacy</a></p>
+                    <p><a class="text-white" href="#">Terms of Service</a></p>
+                </div>
+
+                <div class="col-2">
+                    <h5 class="text-uppercase mb-3">SOCIAL</h5>
+                    <div class="d-flex">
+                        <p class="fs-4 me-3">
+                            <a class="text-white" href="#"><span><i class="fa-brands fa-facebook"></i></span></a>
+                        </p>
+                        <p class="fs-4 me-3">
+                            <a class="text-white" href="#"><span><i class="fa-brands fa-twitter"></i></span></a>
+                        </p>
+                        <p class="fs-4 me-2">
+                            <a class="text-white" href="#"><span><i class="fa-brands fa-youtube"></i></span></a>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

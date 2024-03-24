@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{admin/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: .content-wrapper}, ~{:: #js})}">
+
+<head>
+  <title th:text="${movie.title}"></title>
+
+  <th:block id="css">
+    <link rel="stylesheet" th:href="@{/admin-assets/admin-lte/plugins/summernote/summernote-bs4.min.css}"/>
+    <link rel="stylesheet" th:href="@{/admin-assets/admin-lte/plugins/select2/css/select2.min.css}"/>
+    <link rel="stylesheet" th:href="@{/admin-assets/assets/css/style.css}">
+  </th:block>
+</head>
+
+<body>
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-12">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="/admin/dashboard">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="/admin/movies">Movie</a>
+            </li>
+            <li class="breadcrumb-item active" th:text="${movie.title}"></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row py-2">
+        <div class="col-6">
+          <a href="/admin/movies" type="button" class="btn btn-default">
+            <i class="fas fa-chevron-left"></i> Return
+          </a>
+          <button type="button" class="btn btn-info px-4" id="btn-update">
+            Update
+          </button>
+        </div>
+
+        <div class="col-6 d-flex justify-content-end">
+          <button type="button" class="btn btn-danger px-4" id="btn-delete">
+            Delete
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <form id="form-update-movie">
+                <div class="row">
+                  <div class="col-md-8">
+
+                    <div class="form-group">
+                      <label>Title</label>
+                      <input type="text" class="form-control" id="title" name="title"
+                             th:value="${movie.title}"/>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Description</label>
+                      <textarea id="description" class="form-control" rows="3"
+                                name="description" th:text="${movie.description}"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Directors</label>
+                      <div class="select2-purple">
+                        <select class="form-control select2" id="director" name="director" multiple="multiple">
+                          <option th:each="director : ${directorList}"
+                                  th:value="${director.id}"
+                                  th:text="${director.name}"
+                                  th:selected="${movie.directors.contains(director)}"></option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Actors</label>
+                      <div class="select2-purple">
+                        <select class="form-control select2" id="actor" name="actor" multiple="multiple">
+                          <option th:each="actor : ${actorList}"
+                                  th:value="${actor.id}"
+                                  th:text="${actor.name}"
+                                  th:selected="${movie.actors.contains(actor)}"></option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label>Genres</label>
+                      <div class="select2-purple">
+                        <select class="form-control select2" id="genre" name="genre" multiple="multiple">
+                          <option th:each="genre : ${genreList}"
+                                  th:value="${genre.id}"
+                                  th:text="${genre.name}"
+                                  th:selected="${movie.genres.contains(genre)}"></option>
+                        </select>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>Year release</label>
+                      <input type="text" class="form-control" id="releaseYear" name="releaseYear"
+                             th:value="${movie.releaseYear}"/>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Status</label>
+                      <select id="status" class="form-control" name="status">
+                        <option value="false" th:selected="${movie.status == false}">
+                          Draft
+                        </option>
+                        <option value="true" th:selected="${movie.status == true}">
+                          Public
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Movie Type</label>
+                      <div id="type" th:text="${movie.type.value}"></div>
+                    </div>
+
+                    <div class="form-group">
+                      <div class="image-preview-container mb-3">
+                        <img th:src="${movie.poster}" alt="" id="image-preview"/>
+                      </div>
+
+                      <label for="image" class="btn btn-info btn-flat rounded">
+                        Choose poster
+                      </label>
+                      <input type="file" id="image" class="d-none">
+
+                      <button for="image" class="btn btn-info btn-flat rounded mb-2"
+                              th:onclick="|deletePoster(event, ${movie.id})|">Delete poster</button>
+
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="mb-3">Episode List</h4>
+              <table id="table-director" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th style="width: 5%">#</th>
+                  <th style="width: 10%">Name</th>
+                  <th style="width: 33%">Link</th>
+                  <th style="width: 10%">Status</th>
+                  <th style="width: 30%"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="episode : ${episodeList}">
+                  <td th:text="${episode.displayOrder}"></td>
+                  <td th:text="${episode.name}"></td>
+                  <td th:text="${episode.videoURL}"></td>
+                  <td th:text="${episode.status ? 'Public' : 'Draft'}"></td>
+                  <td>
+                    <!-- upload video -->
+                    <label th:for="|episode-input-${episode.id}|"
+                            class="btn btn-primary btn-sm mb-0"><i
+                            class="fas fa-upload"> Video</i></label>
+                    <!-- label link with the input to open file in device to upload -->
+                    <!-- each loop will have different id => |episode-input-${episode.id}| -->
+                    <input type="file" class="d-none" th:id="|episode-input-${episode.id}|"
+                           th:onchange="|uploadVideo(event, ${episode.id})|">
+
+                    <!-- preview video button -->
+                    <button class="btn btn-warning btn-sm text-white"
+                            th:onclick="|previewVideo(${episode.id})|"
+                            th:classappend="${episode.videoURL == null ? 'disabled' : ''}">
+                      <i class="fas fa-play"> Video</i>
+                    </button>
+
+                    <!-- delete video button -->
+                    <button class="btn btn-danger btn-sm"
+                            th:onclick="|deleteVideo(event, ${episode.id})|"
+                            th:classappend="${episode.videoURL == null ? 'disabled' : ''}">
+                      <i class="fas fa-trash-alt"> Video</i></button>
+
+                    <!-- create episode -->
+                    <button class="btn btn-success btn-sm"
+                            th:onclick="|createSeriesEpisode(event, ${episode.id})|"
+                            th:classappend="${movie.type.value == 'Series Movie' ? '' : 'disabled'}">
+                      <i class="fas fa-plus"> Episode</i></button>
+
+                    <!-- delete episode -->
+                    <button class="btn btn-success btn-sm"
+                            th:onclick="|deleteEpisode(event, ${episode.id})|"
+                            th:classappend="${episodeList.size() == 1 ? 'disabled' : ''}">
+                      <i class="fas fa-trash-alt"> Episode</i></button>
+
+                  </td>
+
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- preview video -->
+  <div class="modal fade" id="modal-preview-video">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Video Preview</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <video width="100%" controls autoplay>
+            <source src="" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<th:block id="js">
+  <script th:src="@{/admin-assets/admin-lte/plugins/summernote/summernote-bs4.min.js}"></script>
+  <script th:src="@{/admin-assets/admin-lte/plugins/select2/js/select2.full.min.js}"></script>
+  <script th:src="@{/js/admin/movie/detail.js}"></script>
+  <script th:inline="javascript">
+    $(".select2").select2();
+
+    const movie = [[${movie}]];
+    const episodeList = [[${episodeList}]];
+
+    $('#content').summernote({
+        height: 500,
+    })
+
+    $("#content").css({
+        "display": "block",
+        "height": "0",
+        "padding": "0",
+        "border": "none"
+    })
+  </script>
+</th:block>
+
+</body>
+
+</html>

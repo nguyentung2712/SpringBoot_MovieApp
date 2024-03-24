@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{admin/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: .content-wrapper}, ~{:: #js})}">
+
+<head>
+    <title th:text="${genre.name}"></title>
+
+    <th:block id="css">
+        <link rel="stylesheet" th:href="@{/admin-assets/admin-lte/plugins/summernote/summernote-bs4.min.css}"/>
+        <link rel="stylesheet" th:href="@{/admin-assets/admin-lte/plugins/select2/css/select2.min.css}"/>
+        <link rel="stylesheet" th:href="@{/admin-assets/assets/css/style.css}">
+    </th:block>
+</head>
+
+<body>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/admin/dashboard">Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="/admin/genres">Genres</a>
+                        </li>
+                        <li class="breadcrumb-item active" th:text="${genre.name}"></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row py-2">
+                <div class="col-6">
+                    <a href="/admin/genres" type="button" class="btn btn-default">
+                        <i class="fas fa-chevron-left"></i>Return
+                    </a>
+                    <button type="button" class="btn btn-info px-4" id="btn-update">
+                        Update
+                    </button>
+                </div>
+
+                <div class="col-6 d-flex justify-content-end">
+                    <button type="button" class="btn btn-danger px-4" id="btn-delete-genre">
+                        Delete
+                    </button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="form-update-genre">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <!-- name label -->
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" id="name" name="name" th:value="${genre.name}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<th:block id="js">
+    <script th:src="@{/admin-assets/admin-lte/plugins/summernote/summernote-bs4.min.js}"></script>
+    <script th:src="@{/admin-assets/admin-lte/plugins/select2/js/select2.full.min.js}"></script>
+    <script th:src="@{/js/admin/genre/detail.js}"></script>
+    <script th:inline="javascript">
+        // inline genre
+        const genre = [[${genre}]];
+
+        $('#content').summernote({
+            height: 500,
+        })
+
+        $("#content").css({
+            "display": "block",
+            "height": "0",
+            "padding": "0",
+            "border": "none"
+        })
+    </script>
+</th:block>
+
+</body>
+
+</html>

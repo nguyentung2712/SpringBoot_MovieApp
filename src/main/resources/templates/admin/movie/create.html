@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{admin/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: .content-wrapper}, ~{:: #js})}">
+
+<head>
+    <title>Create movie</title>
+
+    <th:block id="css">
+        <link rel="stylesheet" th:href="@{/admin-assets/admin-lte/plugins/summernote/summernote-bs4.min.css}"/>
+        <link rel="stylesheet" th:href="@{/admin-assets/admin-lte/plugins/select2/css/select2.min.css}"/>
+        <link rel="stylesheet" th:href="@{/admin-assets/assets/css/style.css}">
+    </th:block>
+
+</head>
+
+<body>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/admin/dashboard">Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="/admin/movies">Movies</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Create movie
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row py-2">
+                <div class="col-6">
+                    <a href="/admin/movies" type="button" class="btn btn-default">
+                        <i class="fas fa-chevron-left"></i> Return
+                    </a>
+                    <button type="button" class="btn btn-info px-4" id="btn-create">
+                        Save
+                    </button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="form-create-movie">
+                                <div class="row">
+
+                                    <div class="col-md-8">
+
+                                        <div class="form-group">
+                                            <label>Title</label>
+                                            <input type="text" class="form-control" id="title" name="title"/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Description</label>
+                                            <textarea id="description" class="form-control" rows="3" name="description"></textarea>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Directors</label>
+                                            <div class="select2-purple">
+                                                <select class="form-control select2" id="director" name="director" multiple="multiple">
+                                                    <option th:each="director : ${directorList}"
+                                                            th:value="${director.id}"
+                                                            th:text="${director.name}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Actors</label>
+                                            <div class="select2-purple">
+                                                <select class="form-control select2" id="actor" name="actor" multiple="multiple">
+                                                    <option th:each="actor : ${actorList}"
+                                                            th:value="${actor.id}"
+                                                            th:text="${actor.name}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label>Genres</label>
+                                            <div class="select2-purple">
+                                                <select class="form-control select2" id="genre" name="genre" multiple="multiple">
+                                                    <option th:each="genre : ${genreList}"
+                                                            th:value="${genre.id}"
+                                                            th:text="${genre.name}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Year release</label>
+                                            <input type="text" class="form-control" id="releaseYear" name="releaseYear"/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Status</label>
+                                            <select id="status" class="form-control" name="status">
+                                                <option value="false">
+                                                    Draft
+                                                </option>
+                                                <option value="true">
+                                                    Public
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Movie Type</label>
+                                            <select id="type" class="form-control" name="type">
+                                                <option value="PHIM_LE">Single Movie</option>
+                                                <option value="PHIM_BO">Series Movie</option>
+                                                <option value="PHIM_CHIEU_RAP">Theater Movie</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<th:block id="js">
+    <script th:src="@{/admin-assets/admin-lte/plugins/summernote/summernote-bs4.min.js}"></script>
+    <script th:src="@{/admin-assets/admin-lte/plugins/select2/js/select2.full.min.js}"></script>
+    <script th:src="@{/js/admin/movie/create.js}"></script>
+    <script th:inline="javascript">
+
+        $(".select2").select2();
+
+        $('#content').summernote({
+        height: 500,
+        })
+
+        $("#content").css({
+            "display": "block",
+            "height": "0",
+            "padding": "0",
+            "border": "none"
+        })
+    </script>
+</th:block>
+
+</body>
+
+</html>

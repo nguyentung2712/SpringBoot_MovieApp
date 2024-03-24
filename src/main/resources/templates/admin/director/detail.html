@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{admin/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: .content-wrapper}, ~{:: #js})}">
+
+<head>
+    <title th:text="${director.name}"></title>
+
+    <th:block id="css">
+        <link rel="stylesheet" th:href="@{/admin-assets/admin-lte/plugins/summernote/summernote-bs4.min.css}"/>
+        <link rel="stylesheet" th:href="@{/admin-assets/admin-lte/plugins/select2/css/select2.min.css}"/>
+        <link rel="stylesheet" th:href="@{/admin-assets/assets/css/style.css}">
+    </th:block>
+</head>
+
+<body>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/admin/dashboard">Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="/admin/directors">Directors</a>
+                        </li>
+                        <li class="breadcrumb-item active" th:text="${director.name}"></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row py-2">
+                <div class="col-6">
+                    <a href="/admin/directors" type="button" class="btn btn-default">
+                        <i class="fas fa-chevron-left"></i>Return
+                    </a>
+                    <button type="button" class="btn btn-info px-4" id="btn-update">
+                        Update
+                    </button>
+                </div>
+
+                <div class="col-6 d-flex justify-content-end">
+                    <button type="button" class="btn btn-danger px-4" id="btn-delete">
+                        Delete
+                    </button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="form-update-director">
+                                <div class="row">
+                                    <div class="col-md-8">
+
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" id="name" name="name" th:value="${director.name}"/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Description</label>
+                                            <textarea class="form-control" rows="5" id="description" name="description" th:text="${director.description}"></textarea>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Birthday</label>
+                                            <input type="date" class="form-control" id="birthday" name="birthday" th:value="${#dates.format(director.birthday, 'yyyy-MM-dd')}">
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <div class="image-preview-container mb-3">
+                                                <img th:src="${director.avatar}" alt="" id="image-preview"/>
+                                            </div>
+                                            
+                                            <label for="image" class="btn btn-info btn-flat rounded">
+                                                Choose picture
+                                            </label>
+                                            <input type="file" id="image" class="d-none">
+
+                                            <button for="image" class="btn btn-info btn-flat rounded mb-2"
+                                                    th:onclick="|deleteAvatar(event, ${director.id})|">Delete avatar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<th:block id="js">
+    <script th:src="@{/admin-assets/admin-lte/plugins/summernote/summernote-bs4.min.js}"></script>
+    <script th:src="@{/admin-assets/admin-lte/plugins/select2/js/select2.full.min.js}"></script>
+    <script th:src="@{/js/admin/director/detail.js}"></script>
+    <script th:inline="javascript">
+
+        const director = [[${director}]];
+
+        $('#content').summernote({
+            height: 500,
+        })
+
+        $("#content").css({
+            "display": "block",
+            "height": "0",
+            "padding": "0",
+            "border": "none"
+        })
+    </script>
+</th:block>
+
+</body>
+
+</html>

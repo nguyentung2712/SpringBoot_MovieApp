@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{::title}, ~{::#css}, ~{::#content}, ~{::#js})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${blog.title}"></title>
+    <th:block id="css"></th:block>
+</head>
+<body>
+    <th:block id="content">
+        <section class="py-4">
+            <div class="container">
+                <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/}">Home Page</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/blogs}">Blogs List</a></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="${blog.title}"></li>
+                    </ol>
+                </nav>
+                <h5 th:text="${blog.title}"></h5>
+                <p class="fst-italic" th:text="${blog.publishedAt}"></p>
+                <p th:text="${blog.description}"></p>
+                <p th:text="${blog.content}"></p>
+                <p th:text="${blog.content}"></p>
+                <p th:text="${blog.content}"></p>
+                <p th:text="${blog.content}"></p>
+                <p th:text="${blog.content}"></p>
+                <p th:text="${blog.content}"></p>
+                <p th:text="${blog.content}"></p>
+                <p th:text="${blog.content}"></p>
+                <p th:text="${blog.content}"></p>
+                <p th:text="${blog.content}"></p>
+                <p th:text="${blog.content}"></p>
+                <p th:text="${blog.content}"></p>
+            </div>
+        </section>
+    </th:block>
+
+    <th:block id="js"></th:block>
+</body>
+</html>

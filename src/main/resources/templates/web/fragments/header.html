@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <header class="bg-dark">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+
+                <!-- icon website -->
+                <a class="navbar-brand" th:href="@{/}">
+                    <img src="/image/logo.png" alt="logo" class="logo">
+                </a>
+
+                <!-- button navbar -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- header choose type of movies -->
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" aria-current="page" th:href="@{/}">Home Page</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" th:href="@{/seriesMovies}">Series Movies</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" th:href="@{/theaterMovies}">Theater Movies</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" th:href="@{/singleMovies}">Single Movies</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- check condition to appear login/logout button -->
+                <div>
+                    <!-- if user don't log in -->
+                    <div th:if="${session.currentUser == null}">
+                        <!-- button log in -->
+                        <button class="btn btn-outline-primary">
+                            <a class="text-white link-underline link-underline-opacity-0" th:href="@{/login}">Login</a>
+                        </button>
+                    </div>
+
+                    <!-- if user log in -->
+                    <div th:if="${session.currentUser != null}" class="d-flex align-items-center">
+                        <!-- user information (name) -->
+                        <p th:text="${session.currentUser.name}" class="mb-0 me-2 text-white"></p>
+                        <!-- button log out -->
+                        <button class="btn btn-outline-primary" type="button">
+                            <a class="text-white fst-italic link-underline link-underline-opacity-0" onclick="logout()">
+                                Logout
+                            </a>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+    </header>
+</body>
+</html>
