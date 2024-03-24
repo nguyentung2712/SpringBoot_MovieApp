@@ -18,8 +18,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(authenticationInterceptor)
                 .addPathPatterns("/api/reviews/**");
 
+        // Only applies to requests to the links below, role ADMIN only
         registry.addInterceptor(roleBasedAuthInterceptor)
-                .addPathPatterns("/admin", "/admin/**", "/api/admin/**") // Chỉ áp dụng cho các request tới các đường dẫn bên dưới
+                .addPathPatterns("/admin", "/admin/**", "/api/admin/**")
                 .excludePathPatterns("/admin-assets/**", "/web/js/**", "/web/css/**", "/web/image/**");
     }
 
