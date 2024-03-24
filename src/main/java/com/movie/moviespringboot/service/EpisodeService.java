@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -123,7 +122,7 @@ public class EpisodeService {
                     .build();
             episodeRepository.save(episodeNewCreate);
 
-            List<Episode> episodeList = episodeRepository.findByMovie_Id(episode.getMovie().getId()).stream().sorted((Comparator.comparingInt(Episode::getDisplayOrder))).toList();
+            List<Episode> episodeList = episodeRepository.findByMovie_IdOrderByDisplayOrderAsc(episode.getMovie().getId());
             int numberOfEpisode = episodeList.size();
 
             for (int i =  episodeNewCreate.getDisplayOrder(); i < numberOfEpisode; i++) {
@@ -148,7 +147,7 @@ public class EpisodeService {
 
         if (episode.getMovie().getType().equals(MovieType.PHIM_BO)){
 
-            List<Episode> episodeList = episodeRepository.findByMovie_Id(episode.getMovie().getId()).stream().sorted((Comparator.comparingInt(Episode::getDisplayOrder))).toList();
+            List<Episode> episodeList = episodeRepository.findByMovie_IdOrderByDisplayOrderAsc(episode.getMovie().getId());
             int numberOfEpisode = episodeList.size();
             int indexEpisodeDelete = episode.getDisplayOrder();
 
