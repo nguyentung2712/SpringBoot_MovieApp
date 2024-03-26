@@ -50,14 +50,23 @@
 
                     <!-- if user log in -->
                     <div th:if="${session.currentUser != null}" class="d-flex align-items-center">
-                        <!-- user information (name) -->
-                        <p th:text="${session.currentUser.name}" class="mb-0 me-2 text-white"></p>
-                        <!-- button log out -->
-                        <button class="btn btn-outline-primary" type="button">
-                            <a class="text-white fst-italic link-underline link-underline-opacity-0" onclick="logout()">
-                                Logout
-                            </a>
-                        </button>
+                        <ul class="navbar-nav ml-auto">
+                            <!-- Notifications Dropdown Menu -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link py-0 d-flex align-items-center" data-toggle="dropdown" href="#">
+                                    <div class="user-panel text-white border border-primary rounded p-2">
+                                        <div class="d-flex align-items-center">
+                                            <span th:text="${session.currentUser.name}"></span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                                    <a href="javascript:void(0)" class="dropdown-item" onclick="logout()">
+                                        <span class="text-muted">Log out</span>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 

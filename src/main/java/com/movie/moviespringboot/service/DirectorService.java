@@ -1,7 +1,6 @@
 package com.movie.moviespringboot.service;
 
 import com.movie.moviespringboot.entity.Director;
-import com.movie.moviespringboot.entity.Movie;
 import com.movie.moviespringboot.exception.ResourceNotFoundException;
 import com.movie.moviespringboot.repository.DirectorRepository;
 import com.movie.moviespringboot.model.request.UpsertDirectorRequest;
@@ -88,7 +87,7 @@ public class DirectorService {
             directorRepository.delete(director);
         }
         else {
-            throw new RuntimeException("Can not delete this director");
+            throw new RuntimeException("This director still existed in some movies, Can't delete this director");
         }
 
     }
