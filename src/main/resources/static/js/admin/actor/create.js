@@ -43,23 +43,23 @@ const descriptionEl = document.getElementById('description');
 const birthdayEl = document.getElementById('birthday');
 const btnCreate = document.getElementById('btn-create');
 btnCreate.addEventListener('click', function () {
-// if form-create-actor is not filled full => return
-if (!$('#form-create-actor').valid()) {
-    return;
-}
-const data = {
-    name: nameEl.value,
-    description: descriptionEl.value,
-    birthday: birthdayEl.value,
-}
-axios.post('/api/admin/actors/create-actor', data)
-    .then(function (response) {
-        toastr.success('Create actor success!')
-        setTimeout(function () {
-            window.location.href = `/admin/actors/${response.data.id}/detail`
-        }, 1500)
-    })
-    .catch(function (error) {
-        toastr.error(error.response.data.message)
-    })
+    // if form-create-actor is not filled full => return
+    if (!$('#form-create-actor').valid()) {
+        return;
+    }
+    const data = {
+        name: nameEl.value,
+        description: descriptionEl.value,
+        birthday: birthdayEl.value,
+    }
+    axios.post('/api/admin/actors/create-actor', data)
+        .then(function (response) {
+            toastr.success('Create actor success!')
+            setTimeout(function () {
+                window.location.href = `/admin/actors/${response.data.id}/detail`
+            }, 1500)
+        })
+        .catch(function (error) {
+            toastr.error(error.response.data.message)
+        })
 })

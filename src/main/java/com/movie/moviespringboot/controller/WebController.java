@@ -152,7 +152,7 @@ public class WebController {
     }
 
     // WATCH MOVIE PAGE
-    // http://localhost:8080/blog/{id}/{slug}?tap={currentEpisode.tap}
+    // http://localhost:8080/watch-movie/{id}/{slug}?tap={currentEpisode.tap}
     @GetMapping("/watch-movie/{id}/{slug}")
     public String getWatchMoviePage(Model model, @PathVariable Integer id,
                                     @PathVariable String slug, @RequestParam String tap) {
@@ -174,4 +174,14 @@ public class WebController {
 
         return "web/watch-movie";
     }
+
+    // DETAIL ACCOUNT
+    // http://localhost:8080/users/{id}/change-password
+    @GetMapping("/users/{id}/change-password")
+    public String getUserDetailPage(Model model) {
+        User user = (User) httpSession.getAttribute("currentUser");
+        model.addAttribute("user", user);
+        return "user/change-password";
+    }
+
 }

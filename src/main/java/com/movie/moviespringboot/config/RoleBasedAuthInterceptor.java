@@ -8,6 +8,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.Objects;
 
+// Handle permission
 @Component
 public class RoleBasedAuthInterceptor implements HandlerInterceptor {
     @Override

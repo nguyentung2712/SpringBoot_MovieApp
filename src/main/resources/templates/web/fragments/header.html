@@ -61,7 +61,13 @@
                                     </div>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                                    <a href="javascript:void(0)" class="dropdown-item" onclick="logout()">
+                                    <a th:href="@{/}" class="dropdown-item">
+                                        <span class="text-muted">Home Page</span>
+                                    </a>
+                                    <a th:href="@{/users/{id}/change-password (id=${session.currentUser.id})}" class="dropdown-item">
+                                        <span class="text-muted">Change password</span>
+                                    </a>
+                                    <a class="dropdown-item" onclick="logout()">
                                         <span class="text-muted">Log out</span>
                                     </a>
                                 </div>

@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+// Handle unauthorized
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
     @Override
@@ -15,7 +16,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
         // If currentUser not existed or equals null then announce 401 error (unauthorized)
         if (user == null) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
             return false;
         }
 

@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // Only applies to requests to the links below
         registry.addInterceptor(authenticationInterceptor)
-                .addPathPatterns("/api/reviews/**");
+                .addPathPatterns("/api/reviews/**","/api/users/**","/users/**","/users");
 
         // Only applies to requests to the links below, role ADMIN only
         registry.addInterceptor(roleBasedAuthInterceptor)
