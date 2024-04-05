@@ -12,6 +12,7 @@ import com.movie.moviespringboot.utils.Validate;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -58,5 +59,49 @@ public class UserService {
         userRepository.save(user);
 
         return user;
+    }
+
+    public User changeInfo(Integer id, UpsertUserRequest request) {
+        User user = getUserById(id);
+
+        if(request.getName().isEmpty()){
+            throw new BadRequestException("Name can not be blank");
+        }
+
+        if (user.getAvatar().equals(StringUtils.generateLinkImage(user.getName()))) {
+            user.setAvatar(request.getName());
+        }
+
+        user.setName(request.getName());
+
+        userRepository.save(user);
+
+        return user;
+    }
+
+    public String uploadAvatar(Integer id, MultipartFile file) {
+        User user = getUserById(id);
+
+        // Upload file into
+        String filePath = FileService.uploadFile(file);
+
+        // Update path avatar for user
+        user.setAvatar(filePath);
+        userRepository.save(user);
+
+        return filePath;
+    }
+
+    public void deleteAvatar(Integer id) {
+        User user = getUserById(id);
+
+        // If user's avatar is unequal with default avatar => delete
+        if(!user.getAvatar().equals(StringUtils.generateLinkImage(user.getName()))){
+            FileService.deleteFile(user.getAvatar());
+            user.setAvatar(StringUtils.generateLinkImage(user.getName()));
+            userRepository.save(user);
+        } else {
+            throw new RuntimeException("Can not delete default avatar");
+        }
     }
 }

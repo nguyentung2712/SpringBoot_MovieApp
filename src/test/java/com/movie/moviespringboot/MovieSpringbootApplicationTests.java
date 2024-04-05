@@ -3,6 +3,7 @@ package com.movie.moviespringboot;
 import com.github.javafaker.Faker;
 import com.github.slugify.Slugify;
 import com.movie.moviespringboot.entity.*;
+import com.movie.moviespringboot.exception.ResourceNotFoundException;
 import com.movie.moviespringboot.model.enums.MovieType;
 import com.movie.moviespringboot.model.enums.UserRole;
 import com.movie.moviespringboot.repository.*;

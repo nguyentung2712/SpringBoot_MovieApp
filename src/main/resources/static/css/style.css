@@ -42,3 +42,15 @@ img {
 #main-menu .navbar-nav a.active {
     color: #ff6901 !important;
 }
+
+.user-panel {
+    display: flex;
+    align-items: center;
+}
+
+.user-panel img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}

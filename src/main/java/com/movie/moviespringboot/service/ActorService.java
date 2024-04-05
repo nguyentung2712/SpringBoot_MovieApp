@@ -107,7 +107,7 @@ public class ActorService {
         Actor actor = getActorById(id);
 
         // If actor's avatar is unequal with default avatar => delete
-        if(!actor.getAvatar().equals(StringUtils.generateLinkImage(actor.getAvatar()))){
+        if(!actor.getAvatar().equals(StringUtils.generateLinkImage(actor.getName()))){
             FileService.deleteFile(actor.getAvatar());
             actor.setAvatar(StringUtils.generateLinkImage(actor.getName()));
             actorRepository.save(actor);

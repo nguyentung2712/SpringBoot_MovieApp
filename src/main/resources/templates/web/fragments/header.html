@@ -54,18 +54,23 @@
                             <!-- Notifications Dropdown Menu -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link py-0 d-flex align-items-center" data-toggle="dropdown" href="#">
-                                    <div class="user-panel text-white border border-primary rounded p-2">
+                                    <div class="user-panel text-white rounded p-2">
                                         <div class="d-flex align-items-center">
                                             <span th:text="${session.currentUser.name}"></span>
+                                            <img th:src="${session.currentUser.avatar}"
+                                                 class="img-circle border ml-1" alt="User Image">
                                         </div>
                                     </div>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                                    <a th:if="${session.currentUser.role.value.toString() == 'ROLE_ADMIN'}" th:href="@{/admin/dashboard}" class="dropdown-item" >
+                                        <span class="text-muted">Dashboard</span>
+                                    </a>
                                     <a th:href="@{/}" class="dropdown-item">
                                         <span class="text-muted">Home Page</span>
                                     </a>
-                                    <a th:href="@{/users/{id}/change-password (id=${session.currentUser.id})}" class="dropdown-item">
-                                        <span class="text-muted">Change password</span>
+                                    <a th:href="@{/users/{id}/info-password-handle (id=${session.currentUser.id})}" class="dropdown-item">
+                                        <span class="text-muted">Change Info & Password</span>
                                     </a>
                                     <a class="dropdown-item" onclick="logout()">
                                         <span class="text-muted">Log out</span>

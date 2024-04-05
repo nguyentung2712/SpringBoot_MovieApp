@@ -176,12 +176,21 @@ public class WebController {
     }
 
     // DETAIL ACCOUNT
-    // http://localhost:8080/users/{id}/change-password
-    @GetMapping("/users/{id}/change-password")
+    // http://localhost:8080/users/{id}/info-password-handle
+    @GetMapping("/users/{id}/info-password-handle")
     public String getUserDetailPage(Model model) {
         User user = (User) httpSession.getAttribute("currentUser");
         model.addAttribute("user", user);
-        return "user/change-password";
+        return "user/info-password-handle";
+    }
+
+    // DASH BOARD
+    // http://localhost:8080/admin/dashboard
+    @GetMapping("/admin/dashboard")
+    public String getDashBoard(Model model) {
+        User user = (User) httpSession.getAttribute("currentUser");
+        model.addAttribute("user",user);
+        return "admin/dashboard/dashboard";
     }
 
 }
