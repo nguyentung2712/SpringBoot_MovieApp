@@ -1,4 +1,4 @@
-// Required and Messages about the
+// Required and Messages
 $('#form-update-movie').validate({
     rules: {
         title: {
@@ -118,6 +118,7 @@ btnUpdate.addEventListener('click', function () {
     axios.put(`/api/admin/movies/${movie.id}/update-movie`, data)
         .then(function (response) {
             toastr.success('Update success')
+            setTimeout(function () { location.reload(); }, 500)
         })
         .catch(function (error) {
             console.log(error)
@@ -181,8 +182,12 @@ const deletePoster = (event, movieId) => {
   axios.delete(`/api/admin/movies/${movieId}/delete-poster`)
     .then(res => {
       toastr.success('Delete poster success')
+      setTimeout(() => {
+          location.reload()
+      }, 1500)
     })
     .catch(err => {
+      console.log(err)
       toastr.error(err.response.data.message)
     })
 }

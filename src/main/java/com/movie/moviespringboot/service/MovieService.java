@@ -79,6 +79,10 @@ public class MovieService {
         Movie movie = movieRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Can't find movie has id is: "+id));
 
+        if (movie.getPoster().equals(StringUtils.generateLinkImage(movie.getTitle())) || movie.getPoster().isEmpty()) {
+            movie.setPoster(StringUtils.generateLinkImage(request.getTitle()));
+        }
+
         // Update movie
         movie.setTitle(request.getTitle());
         movie.setDescription(request.getDescription());
@@ -152,16 +156,20 @@ public class MovieService {
 
     // Delete poster - Resource
     public void deletePoster(Integer id) {
-        // Check movie is existed or not
+        // Check condition: movie want to delete poster is existed
         Movie movie = movieRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Can't find movie has id is: "+id));
 
-        // Delete poster in image_uploads
-        FileService.deleteFile(movie.getPoster());
-
-        // Set movie's poster to null
-        movie.setPoster(StringUtils.generateLinkImage(movie.getTitle()));
-
-        movieRepository.save(movie);
+        // Check condition: movie's poster is different with default poster
+        if (!movie.getPoster().equals(StringUtils.generateLinkImage(movie.getTitle()))) {
+            // Delete poster in image_uploads
+            FileService.deleteFile(movie.getPoster());
+            // Set movie's poster to default
+            movie.setPoster(StringUtils.generateLinkImage(movie.getTitle()));
+            // Save the change to database
+            movieRepository.save(movie);
+        } else {
+            throw new RuntimeException("Can not delete default poster");
+        }
     }
 }

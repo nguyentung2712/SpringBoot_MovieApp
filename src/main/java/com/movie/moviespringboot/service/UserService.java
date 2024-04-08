@@ -68,8 +68,8 @@ public class UserService {
             throw new BadRequestException("Name can not be blank");
         }
 
-        if (user.getAvatar().equals(StringUtils.generateLinkImage(user.getName()))) {
-            user.setAvatar(request.getName());
+        if (user.getAvatar().equals(StringUtils.generateLinkImage(user.getName())) || user.getAvatar().isEmpty()) {
+            user.setAvatar(StringUtils.generateLinkImage(request.getName()));
         }
 
         user.setName(request.getName());
@@ -95,13 +95,13 @@ public class UserService {
     public void deleteAvatar(Integer id) {
         User user = getUserById(id);
 
-        // If user's avatar is unequal with default avatar => delete
-        if(!user.getAvatar().equals(StringUtils.generateLinkImage(user.getName()))){
-            FileService.deleteFile(user.getAvatar());
-            user.setAvatar(StringUtils.generateLinkImage(user.getName()));
-            userRepository.save(user);
-        } else {
-            throw new RuntimeException("Can not delete default avatar");
+        // Check condition: user's avatar as a default => throw exception
+        if(user.getAvatar().equals(StringUtils.generateLinkImage(user.getName()))) {
+            throw new RuntimeException("Can not delete avatar");
         }
+
+        FileService.deleteFile(user.getAvatar());
+        user.setAvatar(StringUtils.generateLinkImage(user.getName()));
+        userRepository.save(user);
     }
 }

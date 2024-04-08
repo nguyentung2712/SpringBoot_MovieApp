@@ -86,7 +86,7 @@ formPassword.addEventListener("submit", (e) => {
     }
 
     // Call api using axios
-    axios.post(`/api/users/${user.id}/change-password`, data)
+    axios.put(`/api/users/${user.id}/change-password`, data)
         .then((response) => {
             if (response.status === 200) {
                 toastr.success('Change password success');

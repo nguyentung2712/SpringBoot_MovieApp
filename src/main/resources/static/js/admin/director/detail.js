@@ -57,6 +57,7 @@ btnUpdate.addEventListener('click', function () {
     axios.put(`/api/admin/directors/${director.id}/update-director`, data)
         .then(function (response) {
             toastr.success('Update success')
+            setTimeout(function () { location.reload(); }, 500)
         })
         .catch(function (error) {
             console.log(error)

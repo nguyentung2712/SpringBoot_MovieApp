@@ -24,7 +24,7 @@ public class UserResource {
         return ResponseEntity.ok(user); // status code 200
     }
 
-    // Change user's info - POST
+    // Change user's info - PUT
     @PutMapping("/{id}/change-info")
     public ResponseEntity changeInfo(@PathVariable Integer id, @RequestBody UpsertUserRequest request) {
         User user = userService.changeInfo(id,request);

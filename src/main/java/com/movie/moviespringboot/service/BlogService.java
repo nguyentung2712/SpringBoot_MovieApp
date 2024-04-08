@@ -38,7 +38,7 @@ public class BlogService {
     // Get blog by id
     public Blog getBlogById(Integer id) {
         return blogRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Can not find blog has id is: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Blog not found"));
     }
 
     // Create new blog
@@ -62,9 +62,12 @@ public class BlogService {
     // Update blog
     public Blog updateBlog(Integer id, UpsertBlogRequest request) {
 
-        Blog blog = blogRepository.findById(id) // check blog existed or not
-                .orElseThrow(() -> new ResourceNotFoundException("Blog not found"));
+        // Check condition: blog need to update is existed
+        Blog blog = getBlogById(id);
 
+        if (blog.getThumbnail().equals(StringUtils.generateLinkImage(blog.getTitle())) || blog.getThumbnail().isEmpty()) {
+            blog.setThumbnail(StringUtils.generateLinkImage(request.getTitle()));
+        }
 
         // Update blog
         blog.setTitle(request.getTitle());

@@ -40,6 +40,7 @@ btnUpdate.addEventListener('click', function () {
     axios.put(`/api/admin/genres/${genre.id}/update-genre`, data)
         .then(function (response) {
             toastr.success('Update success')
+            setTimeout(function () { location.reload(); }, 500)
         })
         .catch(function (error) {
             toastr.error(error.response.data.message)

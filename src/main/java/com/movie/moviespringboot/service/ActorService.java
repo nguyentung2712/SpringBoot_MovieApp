@@ -1,6 +1,7 @@
 package com.movie.moviespringboot.service;
 
 import com.movie.moviespringboot.entity.Actor;
+import com.movie.moviespringboot.exception.BadRequestException;
 import com.movie.moviespringboot.exception.ResourceNotFoundException;
 import com.movie.moviespringboot.repository.ActorRepository;
 import com.movie.moviespringboot.model.request.UpsertActorRequest;
@@ -55,6 +56,10 @@ public class ActorService {
         // Find actor by id
         Actor actor = getActorById(id);
 
+        if (actor.getAvatar().equals(StringUtils.generateLinkImage(actor.getName())) || actor.getAvatar().isEmpty()) {
+            actor.setAvatar(StringUtils.generateLinkImage(request.getName()));
+        }
+        
         // Update actor
         actor.setName(request.getName());
         actor.setDescription(request.getDescription());
@@ -112,7 +117,7 @@ public class ActorService {
             actor.setAvatar(StringUtils.generateLinkImage(actor.getName()));
             actorRepository.save(actor);
         } else {
-            throw new RuntimeException("Can not delete default avatar");
+            throw new BadRequestException("Can not delete default avatar");
         }
     }
 

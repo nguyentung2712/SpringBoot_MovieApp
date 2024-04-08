@@ -1,4 +1,4 @@
-// Required and Messages about the
+// Required and Messages
 $('#form-update-blog').validate({
     rules: {
         title: {
@@ -64,10 +64,10 @@ btnUpdate.addEventListener('click', function () {
     // Using axios to send data to server
     axios.put(`/api/admin/blogs/${blog.id}/update-blog`, data)
         .then(function (response) {
-            toastr.success('Update blog success')
+            toastr.success('Update success')
+            setTimeout(function () { location.reload(); }, 500)
         })
         .catch(function (error) {
-            console.log(error)
             toastr.error(error.response.data.message)
         })
 })
@@ -87,7 +87,6 @@ btnDelete.addEventListener('click', function () {
             }, 1500)
         })
         .catch(function (error) {
-            console.log(error)
             toastr.error(error.response.data.message)
         })
 })
@@ -113,7 +112,6 @@ imageInput.addEventListener("change", (e) => {
             toastr.success('Upload image success')
         })
         .catch(err => {
-            console.log(err)
             toastr.error(err.response.data.message)
         })
 })

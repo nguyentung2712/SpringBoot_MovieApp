@@ -52,11 +52,16 @@ public class DirectorService {
     // Update Director
     public Director updateDirector(Integer id, UpsertDirectorRequest request) {
 
-        // Find director by id
+        // Check condition: director need to update is existed
         Director director = getDirectorById(id);
+
+        if (director.getAvatar().equals(StringUtils.generateLinkImage(director.getName())) || director.getAvatar().isEmpty()) {
+            director.setAvatar(StringUtils.generateLinkImage(request.getName()));
+        }
 
         // Update director
         director.setName(request.getName());
+        director.setAvatar(StringUtils.generateLinkImage(request.getName()));
         director.setDescription(request.getDescription());
         if(request.getBirthday().before(new Date())){
             director.setBirthday(request.getBirthday());
@@ -109,17 +114,20 @@ public class DirectorService {
 
     // Delete avatar - Resource
     public void deleteAvatar(Integer id) {
-        // Check director is existed or not
+        // Check condition: director want to delete avatar is existed
         Director director = directorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Can't find director has id is: "+id));
 
-        // If director's avatar is not equal with default avatar => delete
-        if(!director.getAvatar().equals(StringUtils.generateLinkImage(director.getAvatar()))){
+        // Check condition: director's avatar is different with default avatar
+        if(!director.getAvatar().equals(StringUtils.generateLinkImage(director.getName()))) {
+            // Delete avatar in image_upload
             FileService.deleteFile(director.getAvatar());
+            // Set director's avatar to default
             director.setAvatar(StringUtils.generateLinkImage(director.getName()));
+            // Save the change to database
             directorRepository.save(director);
         } else {
-            throw new RuntimeException("Can not delete this avatar");
+            throw new RuntimeException("Can not delete default avatar");
         }
     }
 
