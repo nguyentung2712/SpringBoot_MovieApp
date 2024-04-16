@@ -91,7 +91,7 @@ btnDelete.addEventListener('click', function () {
         })
 })
 
-// Upload image
+// Upload thumbnail
 const imagePreview = document.getElementById('image-preview')
 const imageInput = document.getElementById('image')
 
@@ -109,9 +109,27 @@ imageInput.addEventListener("change", (e) => {
             // Show image is uploaded
             imagePreview.src = res.data
 
-            toastr.success('Upload image success')
+            toastr.success('Upload thumbnail success')
         })
         .catch(err => {
             toastr.error(err.response.data.message)
         })
 })
+
+// Delete thumbnail
+const deleteThumbnail = (event, blogId) => {
+    const isConfirm = confirm('Are you sure you want to delete this thumbnail?')
+       if (!isConfirm) {
+           return
+       }
+       axios.delete(`/api/admin/blogs/${blogId}/delete-thumbnail`)
+           .then(res => {
+               toastr.success('Delete thumbnail success')
+               setTimeout(() => {
+                   location.reload()
+               }, 1500)
+           })
+           .catch(err => {
+               toastr.error(err.response.data.message)
+           })
+}

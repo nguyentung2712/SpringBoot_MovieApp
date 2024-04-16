@@ -17,21 +17,21 @@ import java.util.List;
 public class DirectorController {
     private final DirectorService directorService;
 
-    // Get All Directors
-    @GetMapping
+    // HomePage all directors
+    @GetMapping("/homePage")
     public String getHomePage(Model model){
         List<Director> directorList = directorService.getAllDirectors();
         model.addAttribute("directorList",directorList);
         return "admin/director/index";
     }
 
-    // Create Director
+    // Create director
     @GetMapping("/create")
     public String getCreatePage(Model model){
         return "admin/director/create";
     }
 
-    // Director Detail
+    // Detail director
     @GetMapping("/{id}/detail")
     public String getDetailPage(@PathVariable Integer id,Model model){
         // Get director by id

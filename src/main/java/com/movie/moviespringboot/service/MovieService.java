@@ -76,8 +76,7 @@ public class MovieService {
     public Movie updateMovie(Integer id, UpsertMovieRequest request) {
 
         // Find movie by id
-        Movie movie = movieRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Can't find movie has id is: "+id));
+        Movie movie = getMovieById(id);
 
         if (movie.getPoster().equals(StringUtils.generateLinkImage(movie.getTitle())) || movie.getPoster().isEmpty()) {
             movie.setPoster(StringUtils.generateLinkImage(request.getTitle()));
@@ -111,8 +110,7 @@ public class MovieService {
     public void deleteMovie(Integer id) {
 
         // Find movie by id
-        Movie movie = movieRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Can't find movie has id is: "+id));
+        Movie movie = getMovieById(id);
 
         // Check 2 conditions:
         // Movie has poster
@@ -141,8 +139,7 @@ public class MovieService {
     public String uploadPoster(Integer id, MultipartFile file) {
 
         // Check movie is existed or not
-        Movie movie = movieRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Can't find movie has id is: "+id));
+        Movie movie = getMovieById(id);
 
         // Upload file into
         String filePath = FileService.uploadFile(file);
@@ -157,19 +154,15 @@ public class MovieService {
     // Delete poster - Resource
     public void deletePoster(Integer id) {
         // Check condition: movie want to delete poster is existed
-        Movie movie = movieRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Can't find movie has id is: "+id));
+        Movie movie = getMovieById(id);
 
-        // Check condition: movie's poster is different with default poster
-        if (!movie.getPoster().equals(StringUtils.generateLinkImage(movie.getTitle()))) {
-            // Delete poster in image_uploads
-            FileService.deleteFile(movie.getPoster());
-            // Set movie's poster to default
-            movie.setPoster(StringUtils.generateLinkImage(movie.getTitle()));
-            // Save the change to database
-            movieRepository.save(movie);
-        } else {
-            throw new RuntimeException("Can not delete default poster");
+        // Check condition: default movie's poster can't be deleted
+        if (movie.getPoster().equals(StringUtils.generateLinkImage(movie.getTitle()))) {
+            throw new RuntimeException("Can not delete default movie's poster");
         }
+
+        FileService.deleteFile(movie.getPoster());
+        movie.setPoster(StringUtils.generateLinkImage(movie.getTitle()));
+        movieRepository.save(movie);
     }
 }

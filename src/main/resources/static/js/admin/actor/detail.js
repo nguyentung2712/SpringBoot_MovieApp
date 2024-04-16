@@ -44,21 +44,23 @@ const birthdayEl = document.getElementById('birthday');
 
 const btnUpdate = document.getElementById('btn-update');
 btnUpdate.addEventListener('click', function () {
-// if form-create-actor is not filled full => return
+    // if form-create-actor is not filled full => return
     if (!$('#form-update-actor').valid()) {
         return;
     }
+
+    // Send data to server
     const data = {
         name: nameEl.value,
         description: descriptionEl.value,
         birthday: birthdayEl.value,
     }
+
+    // Using axios to send data to server
     axios.put(`/api/admin/actors/${actor.id}/update-actor`, data)
         .then(function (response) {
             toastr.success('Update success')
-            setTimeout(function () {
-                location.reload();
-            }, 500)
+            setTimeout(function () { location.reload(); }, 500)
         })
         .catch(function (error) {
             toastr.error(error.response.data.message)
@@ -75,9 +77,7 @@ btnDeleteActor.addEventListener('click', function () {
     axios.delete(`/api/admin/actors/${actor.id}/delete-actor`)
         .then(function (response) {
             toastr.success('Delete success')
-            setTimeout(function () {
-                window.location.href = '/admin/actors'
-            }, 1500)
+            setTimeout(function () { window.location.href = '/admin/actors/homePage' }, 1500)
         })
         .catch(function (error) {
             toastr.error(error.response.data.message)
@@ -90,14 +90,17 @@ const imageInput = document.getElementById('image')
 imageInput.addEventListener("change", (e) => {
     // Get file was chosen
     const file = e.target.files[0]
+
     // Create object form data to send data
     const formData = new FormData()
     formData.append('file', file)
+
     // Call api using axios
     axios.post(`/api/admin/actors/${actor.id}/upload-avatar`, formData)
         .then(res => {
             // Show image was uploaded
             imagePreview.src = res.data
+
             // Using toastr to announce user that upload avatar success
             toastr.success('Upload avatar success!')
         })
@@ -114,11 +117,13 @@ btnDeleteAvatar.addEventListener('click', function () {
     if (!isConfirm) {
        return
     }
-    axios.delete(`/api/admin/actors/${actor.id}/delete-avatar`, )
-        .then(res => {
-          toastr.success('Delete avatar success!')
+    // Call api using axios
+    axios.delete(`/api/admin/actors/${actor.id}/delete-avatar`)
+        .then(function (response) => {
+          toastr.success('Delete avatar success')
+          setTimeout(() => { location.reload() }, 1500)
         })
-        .catch(err => {
-          toastr.error(err.response.data.message)
+        .catch(function (error) => {
+          toastr.error(error.response.data.message)
         })
 })

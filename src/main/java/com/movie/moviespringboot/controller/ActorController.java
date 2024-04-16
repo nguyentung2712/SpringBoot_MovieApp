@@ -17,21 +17,21 @@ import java.util.List;
 public class ActorController {
     private final ActorService actorService;
 
-    // Get All Actors
-    @GetMapping
+    // HomePage all actors
+    @GetMapping("/homePage")
     public String getHomePage(Model model){
         List<Actor> actorList = actorService.getAllActors();
         model.addAttribute("actorList",actorList);
         return "admin/actor/index";
     }
 
-    // Create Actor
+    // Create actor
     @GetMapping("/create")
     public String getCreatePage(Model model){
         return "admin/actor/create";
     }
 
-    // Actor Detail
+    // Detail actor
     @GetMapping("/{id}/detail")
     public String getDetailPage(@PathVariable Integer id, Model model){
         // Get actor by id

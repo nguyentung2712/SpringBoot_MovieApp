@@ -29,7 +29,7 @@ public class MovieController {
     private final EpisodeService episodeService;
 
     // Get All Movies
-    @GetMapping
+    @GetMapping("/homePage")
     public String getHomePage(Model model){
         List<Movie> movieList = movieService.getAllMovies();
         model.addAttribute("movieList",movieList);

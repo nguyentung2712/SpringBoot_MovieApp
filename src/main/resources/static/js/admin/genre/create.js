@@ -39,9 +39,7 @@ const data = {
 axios.post('/api/admin/genres/create-genre', data)
     .then(function (response) {
         toastr.success('Create genre success!')
-        setTimeout(function () {
-            window.location.href = `/admin/genres/${response.data.id}/detail`
-        }, 1500)
+        setTimeout(function () { window.location.href = `/admin/genres/${response.data.id}/detail` }, 1500)
     })
     .catch(function (error) {
         toastr.error(error.response.data.message)

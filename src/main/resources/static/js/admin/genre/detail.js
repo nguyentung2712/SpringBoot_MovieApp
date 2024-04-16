@@ -57,9 +57,7 @@ btnDeleteGenre.addEventListener('click', function () {
     axios.delete(`/api/admin/genres/${genre.id}/delete-genre`)
         .then(function (response) {
             toastr.success('Delete success')
-            setTimeout(function () {
-                window.location.href = '/admin/genres'
-            }, 1500)
+            setTimeout(function () {  window.location.href = '/admin/genres/homePage' }, 1500)
         })
         .catch(function (error) {
             toastr.error(error.response.data.message)

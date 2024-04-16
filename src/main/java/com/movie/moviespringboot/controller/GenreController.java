@@ -18,7 +18,7 @@ public class GenreController {
     private final GenreService genreService;
 
     // Get All Genres
-    @GetMapping
+    @GetMapping("/homePage")
     public String getHomePage(Model model){
         List<Genre> genreList = genreService.getAllGenres();
         model.addAttribute("genreList",genreList);

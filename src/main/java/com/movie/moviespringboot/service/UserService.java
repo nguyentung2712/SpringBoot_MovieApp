@@ -24,27 +24,33 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
+    // Get all users
     public List<User> getAllUser() {
         return userRepository.findByRole(UserRole.USER);
     }
 
+    // Get user by id
     public User getUserById(Integer userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Can not find user has id is: "+userId));
     }
 
+    // Change password
     public User changePassword(Integer id, UpsertUserRequest request) {
-        // Find user by id
+        // Check condition: user want to change password is existed
         User user = getUserById(id);
 
+        // Check condition: current password match
         if (!BeanConfig.bCryptPasswordEncoder().matches(request.getCurrentPassword(), user.getPassword())){
-            throw new BadRequestException("Password not match");
+            throw new BadRequestException("Current Password not match");
         }
 
+        // Check condition: regex new password
         if (!Validate.ValidatePassword(request.getNewPassword())){
-            throw new BadRequestException("Password incorrect form! Password need to contain at least 7 to 15 characters, 1 uppercase characters and 1 special character on this list: . , _ ; - @");
+            throw new BadRequestException("Password incorrect form! Password need to contain at least 8 to 20 characters, 1 uppercase characters and 1 special character on this list: . , _ ; - @");
         }
 
+        // Check condition: new password and confirm new password match
         if (!request.getNewPassword().equals(request.getConfirmNewPassword())){
             throw new BadRequestException("Password and Confirm Password not match");
         }
@@ -61,13 +67,17 @@ public class UserService {
         return user;
     }
 
+    // Change information
     public User changeInfo(Integer id, UpsertUserRequest request) {
+        // Check condition: user want to change info is existed
         User user = getUserById(id);
 
+        // Check condition: user's name can not be blank
         if(request.getName().isEmpty()){
             throw new BadRequestException("Name can not be blank");
         }
 
+        // Check condition: change name => change avatar if avatar as default
         if (user.getAvatar().equals(StringUtils.generateLinkImage(user.getName())) || user.getAvatar().isEmpty()) {
             user.setAvatar(StringUtils.generateLinkImage(request.getName()));
         }
@@ -79,7 +89,9 @@ public class UserService {
         return user;
     }
 
+    // Upload avatar
     public String uploadAvatar(Integer id, MultipartFile file) {
+        // Check condition: user want to upload avatar is existed
         User user = getUserById(id);
 
         // Upload file into
@@ -92,12 +104,14 @@ public class UserService {
         return filePath;
     }
 
+    // Delete avatar
     public void deleteAvatar(Integer id) {
+        // Check condition: user want to delete avatar is existed
         User user = getUserById(id);
 
         // Check condition: user's avatar as a default => throw exception
         if(user.getAvatar().equals(StringUtils.generateLinkImage(user.getName()))) {
-            throw new RuntimeException("Can not delete avatar");
+            throw new RuntimeException("Can not delete default avatar");
         }
 
         FileService.deleteFile(user.getAvatar());

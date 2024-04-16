@@ -16,7 +16,7 @@ public class MovieResource {
     @Autowired
     private final MovieService movieService;
 
-    // create new movie - POST
+    // create movie - POST
     @PostMapping("/create-movie")
     public ResponseEntity createMovie(@RequestBody UpsertMovieRequest request) {
         Movie movie = movieService.createMovie(request);

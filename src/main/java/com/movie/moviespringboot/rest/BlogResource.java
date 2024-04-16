@@ -18,7 +18,7 @@ public class BlogResource {
     @Autowired
     private final BlogService blogService;
 
-    // create new blog - POST
+    // create blog - POST
     @PostMapping("/create-blog")
     public ResponseEntity createBlog(@RequestBody UpsertBlogRequest request) {
         Blog blog = blogService.createBlog(request);
@@ -44,5 +44,12 @@ public class BlogResource {
     public ResponseEntity uploadThumbnail(@RequestParam("file") MultipartFile file, @PathVariable Integer id) {
         String filePath = blogService.uploadThumbnail(id, file);
         return ResponseEntity.ok(filePath); // status code 200
+    }
+
+    // delete thumbnail - DELETE
+    @DeleteMapping("/{id}/delete-thumbnail")
+    public ResponseEntity deleteThumbnail(@PathVariable Integer id) {
+        blogService.deleteThumbnail(id);
+        return ResponseEntity.noContent().build(); // status code 204
     }
 }

@@ -64,7 +64,7 @@ public class ReviewService {
 
         // Check review belong to movie or not
         if(!review.getMovie().getId().equals(movie.getId())) {
-            throw new BadRequestException("This review not belong to this movie");
+            throw new BadRequestException("This review is not belong to this movie");
         }
 
         // Update review

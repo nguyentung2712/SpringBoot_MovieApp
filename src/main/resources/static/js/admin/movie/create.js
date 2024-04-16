@@ -128,7 +128,7 @@ btnCreate.addEventListener('click', function () {
                 toastr.success('Create movie success')
 
                 // go to location path
-                setTimeout(function () { window.location.href = `/admin/movies/${response.data.id}/detail`}, 500) })
+                setTimeout(function () { window.location.href = `/admin/movies/${response.data.id}/detail`}, 1500) })
 
             .catch(function (error) {
 

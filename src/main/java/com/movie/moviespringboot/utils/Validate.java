@@ -13,7 +13,7 @@ public class Validate {
     }
 
     public static boolean ValidatePassword(String password){
-        String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[.,_;-@])(?=\\S+$).{7,15}$";
+        String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[.,_;-@])(?=\\S+$).{8,20}$";
         return Pattern.matches(passwordPattern, password);
     }
 }

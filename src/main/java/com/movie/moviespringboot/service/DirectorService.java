@@ -1,6 +1,7 @@
 package com.movie.moviespringboot.service;
 
 import com.movie.moviespringboot.entity.Director;
+import com.movie.moviespringboot.exception.BadRequestException;
 import com.movie.moviespringboot.exception.ResourceNotFoundException;
 import com.movie.moviespringboot.repository.DirectorRepository;
 import com.movie.moviespringboot.model.request.UpsertDirectorRequest;
@@ -33,62 +34,76 @@ public class DirectorService {
                 .orElseThrow(() -> new ResourceNotFoundException("Can't find director has id is: "+id));
     }
 
-    // Create Director - Resource
+    // Create Director
     public Director createDirector(UpsertDirectorRequest request) {
-        if(request.getBirthday().before(new Date())){
-            Director director = Director.builder()
-                    .name(request.getName())
-                    .description(request.getDescription())
-                    .birthday(request.getBirthday())
-                    .avatar(StringUtils.generateLinkImage(request.getName()))
-                    .build();
-            return directorRepository.save(director);
+        // Check condition: birthday reasonable
+        if (request.getBirthday().getYear() == new Date().getYear()) {
+            if ((request.getBirthday().getMonth() == new Date().getMonth()) && (request.getBirthday().getDate() > new Date().getDate())) {
+                throw new BadRequestException("Birthday must be before or on "+ new Date().getDate());
+            }
+            if (request.getBirthday().getMonth() > new Date().getMonth()) {
+                throw new BadRequestException("Birthday month must be before or in "+ (new Date().getMonth() + 1));
+            }
         }
-        else {
-            throw new RuntimeException("Birthdate must be before "+new Date());
+
+        if (request.getBirthday().getYear() > (new Date().getYear())) {
+            throw new BadRequestException("Birthday year must be before or in "+ (new Date().getYear() + 1900));
         }
+
+        Director director = Director.builder()
+                .name(request.getName())
+                .description(request.getDescription())
+                .birthday(request.getBirthday())
+                .avatar(StringUtils.generateLinkImage(request.getName()))
+                .build();
+        return directorRepository.save(director);
     }
 
-    // Update Director
+    // Update director
     public Director updateDirector(Integer id, UpsertDirectorRequest request) {
-
-        // Check condition: director need to update is existed
+        // Check condition: director want to update is existed
         Director director = getDirectorById(id);
 
+        // Check condition: birthday reasonable
+        if (request.getBirthday().getYear() == new Date().getYear()) {
+            if ((request.getBirthday().getMonth() == new Date().getMonth()) && (request.getBirthday().getDate() > new Date().getDate())) {
+                throw new BadRequestException("Birthday must be before or on "+ new Date().getDate());
+            }
+            if (request.getBirthday().getMonth() > new Date().getMonth()) {
+                throw new BadRequestException("Birthday month must be before or in "+ (new Date().getMonth() + 1));
+            }
+        }
+
+        if (request.getBirthday().getYear() > (new Date().getYear())) {
+            throw new BadRequestException("Birthday year must be before or in "+ (new Date().getYear() + 1900));
+        }
+
+        // Check condition: change name => change avatar if avatar as default
         if (director.getAvatar().equals(StringUtils.generateLinkImage(director.getName())) || director.getAvatar().isEmpty()) {
             director.setAvatar(StringUtils.generateLinkImage(request.getName()));
         }
 
-        // Update director
         director.setName(request.getName());
-        director.setAvatar(StringUtils.generateLinkImage(request.getName()));
+        director.setBirthday(request.getBirthday());
         director.setDescription(request.getDescription());
-        if(request.getBirthday().before(new Date())){
-            director.setBirthday(request.getBirthday());
-        }
-        else {
-            throw new RuntimeException("Birthdate must be before "+new Date());
-        }
 
         return directorRepository.save(director);
     }
 
     // Delete Director
     public void deleteDirector(Integer id) {
-
-        // Find director by id
+        // Check condition: director want to delete is existed
         Director director = getDirectorById(id);
 
-        // Check condition that director doesn't exist in any movie
+        // Check condition: director doesn't exist in any movie
         if(movieRepository.findAll().stream().noneMatch(movie -> movie.getDirectors().stream().anyMatch(directorMatch -> directorMatch.equals(director)))){
             // Check 2 conditions:
-            // Director has avatar
-            // Director's avatar isn't equal with "generateLinkImage(director.getName())"
+            // - director has avatar
+            // - director's avatar isn't equal with "generateLinkImage(director.getName())"
             // => delete image avatar in "image_uploads" file
             if (director.getAvatar() != null && !director.getAvatar().equals(StringUtils.generateLinkImage(director.getName())) ) {
                 FileService.deleteFile(director.getAvatar());
             }
-            // Delete Director
             directorRepository.delete(director);
         }
         else {
@@ -97,9 +112,9 @@ public class DirectorService {
 
     }
 
-    // Upload avatar - Resource
+    // Upload avatar
     public String uploadAvatar(Integer id, MultipartFile file) {
-        // Check director is existed or not
+        // Check condition: director want to upload avatar is existed
         Director director = getDirectorById(id);
 
         // Upload file into
@@ -112,26 +127,22 @@ public class DirectorService {
         return filePath;
     }
 
-    // Delete avatar - Resource
+    // Delete avatar
     public void deleteAvatar(Integer id) {
         // Check condition: director want to delete avatar is existed
-        Director director = directorRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Can't find director has id is: "+id));
+        Director director = getDirectorById(id);
 
         // Check condition: director's avatar is different with default avatar
-        if(!director.getAvatar().equals(StringUtils.generateLinkImage(director.getName()))) {
-            // Delete avatar in image_upload
-            FileService.deleteFile(director.getAvatar());
-            // Set director's avatar to default
-            director.setAvatar(StringUtils.generateLinkImage(director.getName()));
-            // Save the change to database
-            directorRepository.save(director);
-        } else {
-            throw new RuntimeException("Can not delete default avatar");
+        if(director.getAvatar().equals(StringUtils.generateLinkImage(director.getName()))) {
+            throw new BadRequestException("Can not delete default avatar");
         }
+
+        FileService.deleteFile(director.getAvatar());
+        director.setAvatar(StringUtils.generateLinkImage(director.getName()));
+        directorRepository.save(director);
     }
 
-    // Get list directors by request - MovieService
+    // Get list directors by request
     public List<Director> getListDirectorsByRequest(List<Integer> directorIds) {
         // Create list directors were chosen by request
         List<Director> directorList = new ArrayList<>();

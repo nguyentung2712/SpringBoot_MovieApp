@@ -55,9 +55,7 @@ btnCreate.addEventListener('click', function () {
     axios.post('/api/admin/actors/create-actor', data)
         .then(function (response) {
             toastr.success('Create actor success!')
-            setTimeout(function () {
-                window.location.href = `/admin/actors/${response.data.id}/detail`
-            }, 1500)
+            setTimeout(function () { window.location.href = `/admin/actors/${response.data.id}/detail` }, 1500)
         })
         .catch(function (error) {
             toastr.error(error.response.data.message)

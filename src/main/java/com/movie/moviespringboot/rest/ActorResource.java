@@ -16,7 +16,7 @@ public class ActorResource {
     @Autowired
     private final ActorService actorService;
 
-    // create new actor - POST
+    // create actor - POST
     @PostMapping("/create-actor")
     public ResponseEntity createActor(@RequestBody UpsertActorRequest request) {
         Actor actor = actorService.createActor(request);

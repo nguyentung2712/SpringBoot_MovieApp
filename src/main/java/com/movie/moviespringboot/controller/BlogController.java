@@ -18,7 +18,7 @@ public class BlogController {
     private final BlogService blogService;
 
     // Get all blogs
-    @GetMapping
+    @GetMapping("/homePage")
     public String getHomePage(Model model) {
         // Get all blog sort by createdAt decrease
         List<Blog> blogList = blogService.getAllBlogs();

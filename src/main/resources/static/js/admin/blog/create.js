@@ -74,11 +74,7 @@ btnCreate.addEventListener('click', function () {
 
             // announce when create success
             toastr.success('Create blog success')
-            setTimeout(function () {
-
-                // go to location path
-                window.location.href = `/admin/blogs/${response.data.id}/detail`
-            }, 1500)
+            setTimeout(function () { window.location.href = `/admin/blogs/${response.data.id}/detail` }, 1500)
         })
         .catch(function (error) {
 

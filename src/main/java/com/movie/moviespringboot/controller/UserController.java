@@ -17,7 +17,7 @@ public class UserController {
     private final UserService userService;
 
     // Get All Users
-    @GetMapping
+    @GetMapping("/homePage")
     public String getHomePage(Model model){
         List<User> userList = userService.getAllUser();
         model.addAttribute("userList", userList);

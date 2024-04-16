@@ -21,7 +21,7 @@
                 <div class="col-sm-12">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="/admin/blogs">Blog List</a>
+                            <a href="/admin/blogs/homePage">Blog List</a>
                         </li>
                         <li class="breadcrumb-item">
                             <a href="/admin/blogs/own-blogs">My Own Blogs</a>
@@ -98,9 +98,12 @@
                                                 <img th:src="${blog.thumbnail}" alt="" id="image-preview"/>
                                             </div>
                                             <label for="image" class="btn btn-info btn-flat rounded">
-                                                Choose image
+                                                Choose thumbnail
                                             </label>
                                             <input type="file" id="image" class="d-none">
+
+                                            <button class="btn btn-info btn-flat rounded mb-2"
+                                                    th:onclick="|deleteThumbnail(event, ${blog.id})|">Delete thumbnail</button>
                                         </div>
                                     </div>
                                 </div>

@@ -1,5 +1,6 @@
 // Required and Messages
 $('#form-update-director').validate({
+    // required data for director
     rules: {
         name: {
             required: true
@@ -11,6 +12,7 @@ $('#form-update-director').validate({
             required: true
         }
     },
+    // messages announce when director's data is empty
     messages: {
         name: {
             required: "Name is empty"
@@ -42,6 +44,7 @@ const birthdayEl = document.getElementById('birthday');
 
 const btnUpdate = document.getElementById('btn-update');
 btnUpdate.addEventListener('click', function () {
+    // if form-create-director is not filled full => return
     if (!$('#form-update-director').valid()) {
         return;
     }
@@ -60,13 +63,12 @@ btnUpdate.addEventListener('click', function () {
             setTimeout(function () { location.reload(); }, 500)
         })
         .catch(function (error) {
-            console.log(error)
             toastr.error(error.response.data.message)
         })
 })
 
 // Delete director
-const btnDelete = document.getElementById('btn-delete')
+const btnDelete = document.getElementById('btn-delete-director')
 btnDelete.addEventListener('click', function () {
     const isConfirm = confirm('Are you sure you want to delete this information of director?')
     if (!isConfirm) {
@@ -75,12 +77,9 @@ btnDelete.addEventListener('click', function () {
     axios.delete(`/api/admin/directors/${director.id}/delete-director`)
         .then(function (response) {
             toastr.success('Delete success')
-            setTimeout(function () {
-                window.location.href = '/admin/directors'
-            }, 1500)
+            setTimeout(function () { window.location.href = '/admin/directors/homePage' }, 1500)
         })
         .catch(function (error) {
-            console.log(error)
             toastr.error(error.response.data.message)
         })
 })
@@ -88,7 +87,6 @@ btnDelete.addEventListener('click', function () {
 // Upload avatar
 const imagePreview = document.getElementById('image-preview')
 const imageInput = document.getElementById('image')
-
 imageInput.addEventListener("change", (e) => {
     // Get file was chosen
     const file = e.target.files[0]
@@ -103,31 +101,28 @@ imageInput.addEventListener("change", (e) => {
             // Show image was uploaded
             imagePreview.src = res.data
 
+            // Using toastr to announce user that upload avatar success
             toastr.success('Upload avatar success!')
         })
         .catch(err => {
-            console.log(err)
+            // Using toastr to announce user that upload avatar success
             toastr.error(err.response.data.message)
         })
 })
 
 // Delete avatar
-const deleteAvatar = (event, directorId) => {
+const btnDeleteAvatar = document.getElementById('btn-delete-avatar');
+btnDeleteAvatar.addEventListener('click', function () {
     const isConfirm = confirm('Are you sure you want to delete this avatar?')
     if (!isConfirm) {
        return
     }
-    // Call api using axios
-    axios.delete(`/api/admin/directors/${directorId}/delete-avatar`)
-        .then(res => {
+    axios.delete(`/api/admin/directors/${director.id}/delete-avatar`)
+        .then(function (response) {
           toastr.success('Delete avatar success')
-          // Reload page after 1.5s
-          setTimeout(() => {
-              location.reload()
-          }, 1500)
+          setTimeout(function() { location.reload() }, 1500)
         })
-        .catch(err => {
-          console.log(err)
-          toastr.error(err.response.data.message)
+        .catch(function (error) {
+          toastr.error(error.response.data.message)
         })
-}
+})

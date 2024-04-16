@@ -36,52 +36,70 @@ public class ActorService {
 
     // Create actor
     public Actor createActor(UpsertActorRequest request) {
-        if(request.getBirthday().before(new Date())){
-            Actor actor = Actor.builder()
-                    .name(request.getName())
-                    .description(request.getDescription())
-                    .birthday(request.getBirthday())
-                    .avatar(StringUtils.generateLinkImage(request.getName()))
-                    .build();
-            return actorRepository.save(actor);
+        // Check condition: birthday reasonable
+        if (request.getBirthday().getYear() == new Date().getYear()) {
+            if ((request.getBirthday().getMonth() == new Date().getMonth()) && (request.getBirthday().getDate() > new Date().getDate())) {
+                throw new BadRequestException("Birthday must be before or on "+ new Date().getDate());
+            }
+            if (request.getBirthday().getMonth() > new Date().getMonth()) {
+                throw new BadRequestException("Birthday month must be before or in "+ (new Date().getMonth() + 1));
+            }
         }
-        else {
-            throw new RuntimeException("Birthdate must be before "+new Date());
-        }
-    }
 
-    // Update Actor
-    public Actor updateActor(Integer id, UpsertActorRequest request) {
+        if (request.getBirthday().getYear() > (new Date().getYear())) {
+            throw new BadRequestException("Birthday year must be before or in "+ (new Date().getYear() + 1900));
+        }
 
-        // Find actor by id
-        Actor actor = getActorById(id);
-
-        if (actor.getAvatar().equals(StringUtils.generateLinkImage(actor.getName())) || actor.getAvatar().isEmpty()) {
-            actor.setAvatar(StringUtils.generateLinkImage(request.getName()));
-        }
-        
-        // Update actor
-        actor.setName(request.getName());
-        actor.setDescription(request.getDescription());
-        if (request.getBirthday().before(new Date())){
-            actor.setBirthday(request.getBirthday());
-        }
-        else {
-            throw new RuntimeException("Birthdate must be before "+new Date());
-        }
+        Actor actor = Actor.builder()
+                .name(request.getName())
+                .description(request.getDescription())
+                .birthday(request.getBirthday())
+                .avatar(StringUtils.generateLinkImage(request.getName()))
+                .build();
         return actorRepository.save(actor);
     }
 
-    // Delete Actor
-    public void deleteActor(Integer id) {
-
+    // Update actor
+    public Actor updateActor(Integer id, UpsertActorRequest request) {
+        // Check condition: actor want to update info is existed
         Actor actor = getActorById(id);
 
-        // Check condition that actor doesn't exist in any movie
+        // Check condition: birthday reasonable
+        if (request.getBirthday().getYear() == new Date().getYear()) {
+            if ((request.getBirthday().getMonth() == new Date().getMonth()) && (request.getBirthday().getDate() > new Date().getDate())) {
+                throw new BadRequestException("Birthday must be before or on "+ new Date().getDate());
+            }
+            if (request.getBirthday().getMonth() > new Date().getMonth()) {
+                throw new BadRequestException("Birthday month must be before or in "+ (new Date().getMonth() + 1));
+            }
+        }
+
+        if (request.getBirthday().getYear() > (new Date().getYear())) {
+            throw new BadRequestException("Birthday year must be before or in "+ (new Date().getYear() + 1900));
+        }
+
+        // Check condition: change name => change avatar if avatar as default
+        if (actor.getAvatar().equals(StringUtils.generateLinkImage(actor.getName())) || actor.getAvatar().isEmpty()) {
+            actor.setAvatar(StringUtils.generateLinkImage(request.getName()));
+        }
+
+        actor.setName(request.getName());
+        actor.setDescription(request.getDescription());
+        actor.setBirthday(request.getBirthday());
+
+        return actorRepository.save(actor);
+    }
+
+    // Delete actor
+    public void deleteActor(Integer id) {
+        // Check condition: actor want to delete is existed
+        Actor actor = getActorById(id);
+
+        // Check condition: actor doesn't exist in any movie
         if(movieRepository.findAll().stream().noneMatch(movie -> movie.getActors().stream().anyMatch(actorMatch -> actorMatch.equals(actor)))){
             // Check 2 conditions:
-            // Actor has avatar
-            // Actor's avatar isn't equal with "generateLinkImage(actor.getName())"
+            // - actor has avatar
+            // - actor's avatar isn't equal with "generateLinkImage(actor.getName())"
             // => delete image avatar in "image_uploads" file
             if (actor.getAvatar() != null && !actor.getAvatar().equals(StringUtils.generateLinkImage(actor.getName())) ) {
                 FileService.deleteFile(actor.getAvatar());
@@ -89,12 +107,13 @@ public class ActorService {
             actorRepository.delete(actor);
         }
         else {
-            throw new RuntimeException("This actor still existed in some movies, Can't delete this actor");
+            throw new BadRequestException("This actor still existed in some movies, Can't delete this actor");
         }
     }
 
     // Upload avatar
     public String uploadAvatar(Integer id, MultipartFile file) {
+        // Check condition: actor want to upload avatar is existed
         Actor actor = getActorById(id);
 
         // Upload file into
@@ -109,16 +128,17 @@ public class ActorService {
 
     // Delete avatar
     public void deleteAvatar(Integer id) {
+        // Check condition: actor want to delete avatar is existed
         Actor actor = getActorById(id);
 
-        // If actor's avatar is unequal with default avatar => delete
-        if(!actor.getAvatar().equals(StringUtils.generateLinkImage(actor.getName()))){
-            FileService.deleteFile(actor.getAvatar());
-            actor.setAvatar(StringUtils.generateLinkImage(actor.getName()));
-            actorRepository.save(actor);
-        } else {
+        // Check condition: default actor's avatar can't be deleted
+        if(actor.getAvatar().equals(StringUtils.generateLinkImage(actor.getName()))){
             throw new BadRequestException("Can not delete default avatar");
         }
+
+        FileService.deleteFile(actor.getAvatar());
+        actor.setAvatar(StringUtils.generateLinkImage(actor.getName()));
+        actorRepository.save(actor);
     }
 
     // Get list actors by request

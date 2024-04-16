@@ -136,9 +136,7 @@ btnDelete.addEventListener('click', function () {
     axios.delete(`/api/admin/movies/${movie.id}/delete-movie`)
         .then(function (response) {
             toastr.success('Delete success')
-            setTimeout(function () {
-                window.location.href = '/admin/movies'
-            }, 1000)
+            setTimeout(function () { window.location.href = '/admin/movies/homePage' }, 1500)
         })
         .catch(function (error) {
             console.log(error)
@@ -187,7 +185,6 @@ const deletePoster = (event, movieId) => {
       }, 1500)
     })
     .catch(err => {
-      console.log(err)
       toastr.error(err.response.data.message)
     })
 }
