@@ -120,7 +120,7 @@ btnCreate.addEventListener('click', function () {
     }
 
     // Using axios to send data to server
-    axios.post('/api/admin/movies/create-movie', data)
+    axios.post(`/api/admin/movies/create-movie`, data)
         // announce after send data
             .then(function (response) {
 

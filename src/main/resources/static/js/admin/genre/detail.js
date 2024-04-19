@@ -27,7 +27,6 @@ $('#form-update-genre').validate({
 
 // Update genre
 const nameEl = document.getElementById('name');
-
 const btnUpdate = document.getElementById('btn-update');
 btnUpdate.addEventListener('click', function () {
 // if form-create-genre is not filled full => return
@@ -54,7 +53,7 @@ btnDeleteGenre.addEventListener('click', function () {
     if (!isConfirm) {
         return
     }
-    axios.delete(`/api/admin/genres/${genre.id}/delete-genre`)
+    axios.delete(`/api/admin/genres/${genre.id}/delete-genre`, genre.id)
         .then(function (response) {
             toastr.success('Delete success')
             setTimeout(function () {  window.location.href = '/admin/genres/homePage' }, 1500)

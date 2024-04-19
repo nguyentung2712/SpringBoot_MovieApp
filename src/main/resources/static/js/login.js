@@ -2,7 +2,6 @@
 const formLogin = document.getElementById('form-login');
 const emailEl = document.getElementById('email');
 const passwordEl = document.getElementById('password');
-
 formLogin.addEventListener('submit', (e) => {
     e.preventDefault();
     const data = {

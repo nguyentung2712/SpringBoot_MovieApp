@@ -46,7 +46,6 @@ const titleEl = document.getElementById('title');
 const contentEl = document.getElementById('content');
 const descriptionEl = document.getElementById('description');
 const statusEl = document.getElementById('status');
-
 const btnUpdate = document.getElementById('btn-update');
 btnUpdate.addEventListener('click', function () {
     if (!$('#form-update-blog').valid()) {
@@ -79,7 +78,7 @@ btnDelete.addEventListener('click', function () {
     if (!isConfirm) {
         return
     }
-    axios.delete(`/api/admin/blogs/${blog.id}/delete-blog`)
+    axios.delete(`/api/admin/blogs/${blog.id}/delete-blog`, blog.id)
         .then(function (response) {
             toastr.success('Delete blog success')
             setTimeout(function () {
@@ -94,7 +93,6 @@ btnDelete.addEventListener('click', function () {
 // Upload thumbnail
 const imagePreview = document.getElementById('image-preview')
 const imageInput = document.getElementById('image')
-
 imageInput.addEventListener("change", (e) => {
     // Get file was chosen
     const file = e.target.files[0]
@@ -116,20 +114,20 @@ imageInput.addEventListener("change", (e) => {
         })
 })
 
-// Delete thumbnail
-const deleteThumbnail = (event, blogId) => {
+const btnDeleteThumbnail = document.getElementById('delete-thumbnail');
+btnDeleteThumbnail.addEventListener('click', function() {
     const isConfirm = confirm('Are you sure you want to delete this thumbnail?')
-       if (!isConfirm) {
-           return
-       }
-       axios.delete(`/api/admin/blogs/${blogId}/delete-thumbnail`)
-           .then(res => {
-               toastr.success('Delete thumbnail success')
-               setTimeout(() => {
-                   location.reload()
-               }, 1500)
-           })
-           .catch(err => {
-               toastr.error(err.response.data.message)
-           })
-}
+        if (!isConfirm) {
+            return
+        }
+        axios.delete(`/api/admin/blogs/${blog.id}/delete-thumbnail`, blog.id)
+            .then(function (response) {
+                toastr.success('Delete thumbnail success')
+                setTimeout(function () {
+                    location.reload()
+                }, 1500)
+            })
+            .catch(function (error) {
+                toastr.error(error.response.data.message)
+            })
+})

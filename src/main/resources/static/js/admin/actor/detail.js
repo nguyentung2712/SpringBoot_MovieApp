@@ -41,7 +41,6 @@ $('#form-update-actor').validate({
 const nameEl = document.getElementById('name');
 const descriptionEl = document.getElementById('description');
 const birthdayEl = document.getElementById('birthday');
-
 const btnUpdate = document.getElementById('btn-update');
 btnUpdate.addEventListener('click', function () {
     // if form-create-actor is not filled full => return
@@ -74,7 +73,7 @@ btnDeleteActor.addEventListener('click', function () {
     if (!isConfirm) {
         return
     }
-    axios.delete(`/api/admin/actors/${actor.id}/delete-actor`)
+    axios.delete(`/api/admin/actors/${actor.id}/delete-actor`, actor.id)
         .then(function (response) {
             toastr.success('Delete success')
             setTimeout(function () { window.location.href = '/admin/actors/homePage' }, 1500)
@@ -111,19 +110,19 @@ imageInput.addEventListener("change", (e) => {
 })
 
 // Delete avatar
-const btnDeleteAvatar = document.getElementById('btn-delete-avatar');
+const btnDeleteAvatar = document.getElementById('delete-avatar');
 btnDeleteAvatar.addEventListener('click', function () {
     const isConfirm = confirm('Are you sure you want to delete this avatar?')
     if (!isConfirm) {
        return
     }
     // Call api using axios
-    axios.delete(`/api/admin/actors/${actor.id}/delete-avatar`)
-        .then(function (response) => {
+    axios.delete(`/api/admin/actors/${actor.id}/delete-avatar`, actor.id)
+        .then(function (response) {
           toastr.success('Delete avatar success')
           setTimeout(() => { location.reload() }, 1500)
         })
-        .catch(function (error) => {
+        .catch(function (error) {
           toastr.error(error.response.data.message)
         })
 })

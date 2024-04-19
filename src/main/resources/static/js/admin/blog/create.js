@@ -49,7 +49,6 @@ const titleEl = document.getElementById('title');
 const contentEl = document.getElementById('content');
 const descriptionEl = document.getElementById('description');
 const statusEl = document.getElementById('status');
-
 const btnCreate = document.getElementById('btn-create');
 btnCreate.addEventListener('click', function () {
 

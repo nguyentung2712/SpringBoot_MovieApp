@@ -74,7 +74,6 @@ const genreEl = document.getElementById('genre');
 const releaseYearEl = document.getElementById('releaseYear');
 const statusEl = document.getElementById('status');
 const typeEl = document.getElementById('type');
-
 const btnUpdate = document.getElementById('btn-update');
 btnUpdate.addEventListener('click', function () {
     if (!$('#form-update-movie').valid()) {
@@ -133,7 +132,7 @@ btnDelete.addEventListener('click', function () {
     if (!isConfirm) {
         return
     }
-    axios.delete(`/api/admin/movies/${movie.id}/delete-movie`)
+    axios.delete(`/api/admin/movies/${movie.id}/delete-movie`, movie.id)
         .then(function (response) {
             toastr.success('Delete success')
             setTimeout(function () { window.location.href = '/admin/movies/homePage' }, 1500)
@@ -147,7 +146,6 @@ btnDelete.addEventListener('click', function () {
 // Upload poster
 const imagePreview = document.getElementById('image-preview')
 const imageInput = document.getElementById('image')
-
 imageInput.addEventListener("change", (e) => {
     // Get file was chosen
     const file = e.target.files[0]
@@ -171,23 +169,22 @@ imageInput.addEventListener("change", (e) => {
 })
 
 // Delete poster
-const deletePoster = (event, movieId) => {
-  const isConfirm = confirm('Are you sure you want to delete this poster?')
-  if (!isConfirm) {
-      return
-  }
-  // Call api using axios
-  axios.delete(`/api/admin/movies/${movieId}/delete-poster`)
-    .then(res => {
-      toastr.success('Delete poster success')
-      setTimeout(() => {
-          location.reload()
-      }, 1500)
-    })
-    .catch(err => {
-      toastr.error(err.response.data.message)
-    })
-}
+const btnDeletePoster = document.getElementById('delete-poster');
+btnDeletePoster.addEventListener('click', function () {
+    const isConfirm = confirm('Are you sure you want to delete this poster?')
+      if (!isConfirm) {
+          return
+      }
+      // Call api using axios
+      axios.delete(`/api/admin/movies/${movie.id}/delete-poster`, movie.id)
+        .then(function (response) {
+          toastr.success('Delete poster success')
+          setTimeout(function () { location.reload() }, 1500)
+        })
+        .catch(function (error) {
+          toastr.error(error.response.data.message)
+        })
+})
 
 // Create episode for SeriesMovie
 const createSeriesEpisode = (event, episodeId) => {

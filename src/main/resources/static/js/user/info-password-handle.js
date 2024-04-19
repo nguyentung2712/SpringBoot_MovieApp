@@ -73,7 +73,6 @@ const inputCurrentPassword = document.getElementById('current-password');
 const inputNewPassword = document.getElementById('new-password');
 const inputConfirmNewPassword = document.getElementById('confirm-new-password');
 const formPassword = document.getElementById('form-password');
-
 formPassword.addEventListener("submit", (e) => {
     e.preventDefault();
 

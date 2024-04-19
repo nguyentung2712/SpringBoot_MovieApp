@@ -4,7 +4,6 @@ const inputEmail = document.getElementById('email');
 const inputPassword = document.getElementById('password');
 const inputConfirmPassword = document.getElementById('confirmPassword')
 const formRegister = document.getElementById('form-register');
-
 formRegister.addEventListener("submit", (e) => {
     e.preventDefault();
 

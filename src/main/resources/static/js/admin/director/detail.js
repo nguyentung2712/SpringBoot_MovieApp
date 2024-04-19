@@ -41,7 +41,6 @@ $('#form-update-director').validate({
 const nameEl = document.getElementById('name');
 const descriptionEl = document.getElementById('description');
 const birthdayEl = document.getElementById('birthday');
-
 const btnUpdate = document.getElementById('btn-update');
 btnUpdate.addEventListener('click', function () {
     // if form-create-director is not filled full => return
@@ -74,7 +73,7 @@ btnDelete.addEventListener('click', function () {
     if (!isConfirm) {
         return
     }
-    axios.delete(`/api/admin/directors/${director.id}/delete-director`)
+    axios.delete(`/api/admin/directors/${director.id}/delete-director`, director.id)
         .then(function (response) {
             toastr.success('Delete success')
             setTimeout(function () { window.location.href = '/admin/directors/homePage' }, 1500)
@@ -117,7 +116,7 @@ btnDeleteAvatar.addEventListener('click', function () {
     if (!isConfirm) {
        return
     }
-    axios.delete(`/api/admin/directors/${director.id}/delete-avatar`)
+    axios.delete(`/api/admin/directors/${director.id}/delete-avatar`, director.id)
         .then(function (response) {
           toastr.success('Delete avatar success')
           setTimeout(function() { location.reload() }, 1500)
