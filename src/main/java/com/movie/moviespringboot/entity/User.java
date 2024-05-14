@@ -1,9 +1,13 @@
 package com.movie.moviespringboot.entity;
 
+import com.movie.moviespringboot.model.enums.Enabled;
+import com.movie.moviespringboot.model.enums.Gender;
 import com.movie.moviespringboot.model.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.Date;
 
 @ToString
 @Getter
@@ -22,6 +26,15 @@ public class User {
     @Column(nullable = false)
     String name;
 
+    @Column
+    Date birthday;
+
+    @Enumerated(EnumType.STRING)
+    Gender gender;
+
+    @Column
+    String phoneNumber;
+
     @Column(nullable = false)
     String email;
 
@@ -33,4 +46,8 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     UserRole role;
+
+    // Manage enabled by ROLE_ADMIN
+    @Enumerated(EnumType.STRING)
+    Enabled enabled;
 }

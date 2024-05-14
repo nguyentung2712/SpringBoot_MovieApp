@@ -122,18 +122,15 @@ btnCreate.addEventListener('click', function () {
     // Using axios to send data to server
     axios.post(`/api/admin/movies/create-movie`, data)
         // announce after send data
-            .then(function (response) {
+        .then(function (response) {
+            // announce when create success
+            toastr.success('Create movie success')
 
-                // announce when create success
-                toastr.success('Create movie success')
-
-                // go to location path
-                setTimeout(function () { window.location.href = `/admin/movies/${response.data.id}/detail`}, 1500) })
-
-            .catch(function (error) {
-
-                // send error announce when create fail
-                console.log(error)
-                toastr.error(error.response.data.message)
-            })
+            // go to location path
+            setTimeout(function () { window.location.href = `/admin/movies/${response.data.id}/detail`}, 1500)
+        })
+        .catch(function (error) {
+            // send error announce when create fail
+            toastr.error(error.response.data.message)
+        })
 })

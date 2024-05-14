@@ -1,5 +1,8 @@
 // Change info handle
 const inputName = document.getElementById('name');
+const inputBirthday = document.getElementById('birthday');
+const inputGender = document.getElementById('gender');
+const inputPhoneNumber = document.getElementById('phoneNumber');
 const formInfo = document.getElementById('form-info');
 
 formInfo.addEventListener("submit", (e) => {
@@ -8,7 +11,10 @@ formInfo.addEventListener("submit", (e) => {
     // Check name's condition
     // Get data from formInfo
     const data = {
-        name: inputName.value
+        name: inputName.value,
+        birthday: inputBirthday.value,
+        gender: inputGender.value,
+        phoneNumber: inputPhoneNumber.value
     }
 
     // Call api using axios
@@ -43,6 +49,9 @@ imageInput.addEventListener("change", (e) => {
         .then(res => {
             // Show image was uploaded
             imagePreview.src = res.data
+            setTimeout(() => {
+                location.reload()
+            }, 500);
             // Using toastr to announce user that upload avatar success
             toastr.success('Upload avatar success!')
         })
@@ -62,6 +71,9 @@ btnDeleteAvatar.addEventListener('click', function () {
     axios.delete(`/api/users/${user.id}/delete-avatar`)
         .then(res => {
           toastr.success('Delete avatar success!')
+          setTimeout(() => {
+              location.reload()
+          }, 500);
         })
         .catch(err => {
           toastr.error(err.response.data.message)

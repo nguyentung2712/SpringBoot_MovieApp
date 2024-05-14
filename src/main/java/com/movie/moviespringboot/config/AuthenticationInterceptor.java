@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.util.Objects;
+
 // Handle unauthorized
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
@@ -20,6 +22,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        return true;
+        // If user has been disabled by admin, user can not have any account usage right
+        String enabled = user.getEnabled().getValue();
+        if (Objects.equals(enabled,"Enabled")) {
+            return true;
+        } else {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Your account has been disabled");
+            return false;
+        }
     }
 }

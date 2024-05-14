@@ -22,7 +22,7 @@ public class RoleBasedAuthInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        // Only accept for ROLE_ADMIN
+        // Only accept for ROLE_ADMIN else announce forbidden error
         String role = user.getRole().getValue();
         if (Objects.equals(role, "ROLE_ADMIN")) {
             return true;

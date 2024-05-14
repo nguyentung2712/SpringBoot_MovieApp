@@ -34,14 +34,14 @@ public class UserResource {
     // upload user's avatar - POST
     @PostMapping("/{id}/upload-avatar")
     public ResponseEntity uploadAvatar(@PathVariable Integer id, @RequestParam("file") MultipartFile file) {
-        String filePath = userService.uploadAvatar(id,file);
-        return ResponseEntity.ok(filePath); // status code 200
+        User user = userService.uploadAvatar(id,file);
+        return ResponseEntity.ok(user); // status code 200
     }
 
     // delete user's avatar - DELETE
     @DeleteMapping("/{id}/delete-avatar")
     public ResponseEntity deleteAvatar(@PathVariable Integer id) {
-        userService.deleteAvatar(id);
-        return ResponseEntity.noContent().build(); // status code 204
+        User user = userService.deleteAvatar(id);
+        return ResponseEntity.ok(user); // status code 204
     }
 }

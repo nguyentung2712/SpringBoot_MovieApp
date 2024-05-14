@@ -27,7 +27,7 @@ public class ActorController {
 
     // Create actor
     @GetMapping("/create")
-    public String getCreatePage(Model model){
+    public String getCreatePage(){
         return "admin/actor/create";
     }
 

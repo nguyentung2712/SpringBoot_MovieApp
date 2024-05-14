@@ -5,6 +5,7 @@ import com.movie.moviespringboot.entity.Review;
 import com.movie.moviespringboot.entity.User;
 import com.movie.moviespringboot.exception.BadRequestException;
 import com.movie.moviespringboot.exception.ResourceNotFoundException;
+import com.movie.moviespringboot.model.enums.UserRole;
 import com.movie.moviespringboot.repository.MovieRepository;
 import com.movie.moviespringboot.repository.ReviewRepository;
 import com.movie.moviespringboot.repository.UserRepository;
@@ -75,18 +76,19 @@ public class ReviewService {
     }
 
     // delete review
+    // TODO: change condition to make admin can delete any comment of user
     public void deleteReview(Integer id) {
         User user = (User) httpSession.getAttribute("currentUser");
 
         Review review = reviewRepository.findById(id) // check review existed or not
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
 
-        // Check user is who create review or not
-        if(!review.getUser().getId().equals(user.getId())) {
+        // Check condition: Only review's owner or admin have permission to delete review
+        if (review.getUser().getId().equals(user.getId()) || userRepository.findAll().stream().anyMatch(userMatch -> userMatch.getRole().equals(UserRole.ADMIN))) {
+            // Delete Review
+            reviewRepository.delete(review);
+        } else {
             throw new BadRequestException("You are not allow to delete this review");
         }
-
-        // Delete Review
-        reviewRepository.delete(review);
     }
 }

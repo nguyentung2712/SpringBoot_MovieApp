@@ -130,7 +130,7 @@
 
                                     <!-- button action -->
                                     <!-- check condition that user is the owner of review -->
-                                    <div class="rating-action mt-2" th:if="${session.currentUser != null && session.currentUser.id == review.user.id}">
+                                    <div class="rating-action mt-2" th:if="${session.currentUser != null && session.currentUser.id == review.user.id || session.currentUser != null && session.currentUser.role.value.toString() == 'ROLE_ADMIN'}">
                                         <!-- edit button -->
                                         <!-- using 'onclick' function with review.id and modal to handle edit review -->
                                         <a href="javascript:void(0)" class="text-primary text-decoration-underline me-2" th:onclick="|openModalUpdate(${review.id})|">Edit</a>

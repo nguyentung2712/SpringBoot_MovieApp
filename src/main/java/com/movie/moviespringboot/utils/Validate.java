@@ -6,6 +6,12 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Validate {
+
+    public static boolean ValidatePhoneNumber(String phoneNumber){
+        String phoneNumberPattern = "^0\\d{9}$";
+        return Pattern.matches(phoneNumberPattern, phoneNumber);
+    }
+
     public static boolean ValidateEmail(String email){
         String emailPattern = "^(?=.{1,64}@)[A-Za-z0-9\\+_-]+(\\.[A-Za-z0-9\\+_-]+)*@"
                 + "[^-][A-Za-z0-9\\+-]+(\\.[A-Za-z0-9\\+-]+)*(\\.[A-Za-z]{2,})$";

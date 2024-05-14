@@ -27,7 +27,7 @@ public class DirectorController {
 
     // Create director
     @GetMapping("/create")
-    public String getCreatePage(Model model){
+    public String getCreatePage(){
         return "admin/director/create";
     }
 

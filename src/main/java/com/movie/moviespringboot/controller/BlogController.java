@@ -36,7 +36,7 @@ public class BlogController {
 
     // Create blog
     @GetMapping("/create")
-    public String getCreatePage(Model model) {
+    public String getCreatePage() {
         return "admin/blog/create";
     }
 

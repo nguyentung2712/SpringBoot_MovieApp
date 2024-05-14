@@ -27,7 +27,7 @@ public class GenreController {
 
     // Create Genre
     @GetMapping("/create")
-    public String getCreatePage(Model model){
+    public String getCreatePage(){
         return "admin/genre/create";
     }
 

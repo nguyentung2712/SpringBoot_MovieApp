@@ -4,6 +4,8 @@ import com.github.javafaker.Faker;
 import com.github.slugify.Slugify;
 import com.movie.moviespringboot.entity.*;
 import com.movie.moviespringboot.exception.ResourceNotFoundException;
+import com.movie.moviespringboot.model.enums.Enabled;
+import com.movie.moviespringboot.model.enums.Gender;
 import com.movie.moviespringboot.model.enums.MovieType;
 import com.movie.moviespringboot.model.enums.UserRole;
 import com.movie.moviespringboot.repository.*;
@@ -20,7 +22,9 @@ import java.util.List;
 import java.util.Random;
 
 @SpringBootTest
-class MovieSpringbootApplicationTests {
+class
+
+MovieSpringbootApplicationTests {
 
 	@Autowired
 	private GenreRepository genreRepository;
@@ -223,17 +227,32 @@ class MovieSpringbootApplicationTests {
 		// Fake data using Faker
 		Faker faker = new Faker();
 
-		for (int i = 0; i < 20; i++) {
-			String name = faker.name().fullName();
-			User user = User.builder()
-					.name(name)
-					.email(faker.internet().emailAddress())
-					.password(passwordEncoder.encode("123"))
-					.avatar(StringUtils.generateLinkImage(name))
-					.role(i == 0 || i == 1 ? UserRole.ADMIN : UserRole.USER)
-					.build();
+		if (faker.date().birthday().before(new Date())) {
+			for (int i = 0; i < 20; i++) {
+				String name = faker.name().fullName();
+				User user = User.builder()
+						// name
+						.name(name)
+						// birthday
+						.birthday(faker.date().birthday())
+						// gender
+						.gender(Gender.values()[faker.number().numberBetween(0,2)])
+						// phone number
+						.phoneNumber(faker.phoneNumber().cellPhone())
+						// email
+						.email(faker.internet().emailAddress())
+						// password
+						.password(passwordEncoder.encode("123"))
+						// avatar
+						.avatar(StringUtils.generateLinkImage(name))
+						// role
+						.role(i == 0 || i == 1 ? UserRole.ADMIN : UserRole.USER)
+						// enabled
+						.enabled(Enabled.ENABLED)
+						.build();
 
-			userRepository.save(user); // Save to database
+				userRepository.save(user); // Save to database
+			}
 		}
 	}
 

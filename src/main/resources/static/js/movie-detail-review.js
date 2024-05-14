@@ -76,12 +76,13 @@ const renderReviews = (reviews) => {
                     </div>
                     <div class="rating-content mb-0 mt-1 text-muted">${review.content}</div>
 
-                    ${currentUser && currentUser.id === review.user.id
+                    ${currentUser && currentUser.id === review.user.id || currentUser && currentUser.role.value === "ROLE_ADMIN"
                         ? `<div class="rating-action mt-2">
                               <a href="javascript:void(0)" class="text-primary text-decoration-underline me-2" onclick="openModalUpdate(${review.id})">Edit</a>
                               <a href="javascript:void(0)" class="text-danger text-decoration-underline" onclick="deleteReview(${review.id})">Delete</a>
                         </div>` : ''
                     }
+
                 </div>
             </div>
         `
@@ -93,6 +94,7 @@ const renderReviews = (reviews) => {
 
 // HANDLES ABOUT REVIEW: DELETE, CREATE, UPDATE
 let reviewIdUpdated = null;
+
 // 1. Delete review
 const deleteReview = (reviewId) => {
      // ask user want to delete or not?
