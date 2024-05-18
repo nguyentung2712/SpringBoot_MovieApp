@@ -247,7 +247,7 @@ public class UserService {
     }
 
     // Update info user and disable user's account
-    public void changeInfoUserByAdmin(Integer id, UpsertUserRequest request) {
+    public User changeInfoUserByAdmin(Integer id, UpsertUserRequest request) {
         User user = getUserById(id);
 
         // Check condition: user's name can not be blank
@@ -291,6 +291,6 @@ public class UserService {
 
         user.setEnabled(request.getEnabled());
 
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 }

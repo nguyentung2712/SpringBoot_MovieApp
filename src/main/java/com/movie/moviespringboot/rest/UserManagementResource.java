@@ -23,7 +23,7 @@ public class UserManagementResource {
 
     @PutMapping("/{id}/change-info-user")
     public ResponseEntity changeInfoUser(@PathVariable Integer id, @RequestBody UpsertUserRequest request) {
-        userService.changeInfoUserByAdmin(id,request);
-        return ResponseEntity.noContent().build(); // status code 204
+        User user = userService.changeInfoUserByAdmin(id,request);
+        return ResponseEntity.ok(user); // status code 200
     }
 }
