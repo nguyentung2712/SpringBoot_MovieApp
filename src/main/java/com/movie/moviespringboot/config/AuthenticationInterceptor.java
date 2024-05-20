@@ -22,13 +22,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        // If user has been disabled by admin, user can not have any account usage right
-        String enabled = user.getEnabled().getValue();
-        if (Objects.equals(enabled,"Enabled")) {
-            return true;
-        } else {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Your account has been disabled");
-            return false;
-        }
+        return true;
     }
 }

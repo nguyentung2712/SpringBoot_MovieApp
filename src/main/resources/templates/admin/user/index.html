@@ -44,7 +44,6 @@
                                 <tr>
                                     <th>Avatar</th>
                                     <th>Name</th>
-                                    <th>Gender</th>
                                     <th>Email</th>
                                     <th>Enabled</th>
                                 </tr>
@@ -58,7 +57,6 @@
                                         <a th:href="@{/admin/users/{id}/detail (id=${user.id})}"
                                            th:text="${user.name}"></a>
                                     </td>
-                                    <td th:text="${user.gender}"></td>
                                     <td th:text="${user.email}"></td>
                                     <td th:text="${user.enabled}"></td>
                                 </tr>

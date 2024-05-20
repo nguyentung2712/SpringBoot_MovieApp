@@ -5,6 +5,7 @@ import com.movie.moviespringboot.entity.Review;
 import com.movie.moviespringboot.entity.User;
 import com.movie.moviespringboot.exception.BadRequestException;
 import com.movie.moviespringboot.exception.ResourceNotFoundException;
+import com.movie.moviespringboot.model.enums.Enabled;
 import com.movie.moviespringboot.model.enums.UserRole;
 import com.movie.moviespringboot.repository.MovieRepository;
 import com.movie.moviespringboot.repository.ReviewRepository;
@@ -37,6 +38,10 @@ public class ReviewService {
         Movie movie = movieRepository.findById(request.getMovieId()) // check movie existed or not
                 .orElseThrow(() -> new ResourceNotFoundException("Movie not found"));
 
+        if (user.getEnabled().equals(Enabled.DISABLED)) {
+            throw new BadRequestException("You has been disabled to create review");
+        }
+
         // create review
         Review review = Review.builder()
                 .content(request.getContent())
@@ -68,6 +73,10 @@ public class ReviewService {
             throw new BadRequestException("This review is not belong to this movie");
         }
 
+        if (user.getEnabled().equals(Enabled.DISABLED)) {
+            throw new BadRequestException("You has been disabled to update review");
+        }
+
         // Update review
         review.setContent(request.getContent());
         review.setRating(request.getRating());
@@ -76,12 +85,15 @@ public class ReviewService {
     }
 
     // delete review
-    // TODO: change condition to make admin can delete any comment of user
     public void deleteReview(Integer id) {
         User user = (User) httpSession.getAttribute("currentUser");
 
         Review review = reviewRepository.findById(id) // check review existed or not
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
+
+        if (user.getEnabled().equals(Enabled.DISABLED)) {
+            throw new BadRequestException("You has been disabled to delete review");
+        }
 
         // Check condition: Only review's owner or admin have permission to delete review
         if (review.getUser().getId().equals(user.getId()) || userRepository.findAll().stream().anyMatch(userMatch -> userMatch.getRole().equals(UserRole.ADMIN))) {

@@ -76,7 +76,7 @@ const renderReviews = (reviews) => {
                     </div>
                     <div class="rating-content mb-0 mt-1 text-muted">${review.content}</div>
 
-                    ${currentUser && currentUser.id === review.user.id || currentUser && currentUser.role.value === "ROLE_ADMIN"
+                    ${currentUser && currentUser.id === review.user.id && currentUser.enabled.value === "Enabled" || currentUser && currentUser.role.value === "ROLE_ADMIN"
                         ? `<div class="rating-action mt-2">
                               <a href="javascript:void(0)" class="text-primary text-decoration-underline me-2" onclick="openModalUpdate(${review.id})">Edit</a>
                               <a href="javascript:void(0)" class="text-danger text-decoration-underline" onclick="deleteReview(${review.id})">Delete</a>
@@ -94,6 +94,36 @@ const renderReviews = (reviews) => {
 
 // HANDLES ABOUT REVIEW: DELETE, CREATE, UPDATE
 let reviewIdUpdated = null;
+const btnOpenModalReview = document.getElementById('btn-open-modal-review')
+const ratingContentEl = document.getElementById('rating-content')
+const modalReview = new bootstrap.Modal(document.getElementById('modal-review'), {
+    keyboard: false
+})
+
+// Button open modal review
+btnOpenModalReview.addEventListener('click',function() {
+    // Open modal
+    modalReview.show();
+
+    resetStars();
+    // reset rating value
+    ratingValue.textContent = "";
+    // reset rating content
+    ratingContentEl.value = "";
+    // reset review update
+    reviewIdUpdated = null;
+    // current rating
+    currentRating = 0;
+
+    // Change title modal
+    document.getElementById("modal-title").innerHTML = "Write review";
+})
+
+// Button close modal review
+const btnClose = document.getElementById('btn-close')
+btnClose.addEventListener('click', function() {
+    modalReview.hide();
+})
 
 // 1. Delete review
 const deleteReview = (reviewId) => {
@@ -111,7 +141,7 @@ const deleteReview = (reviewId) => {
             reviews = reviews.filter(review => review.id !== reviewId)
             // render reviews
             renderReviews(reviews)
-
+            setTimeout(() => { location.reload() }, 500);
         }).catch(function (error) {
             console.log(error);
             // using toastr library to announce user
@@ -119,35 +149,8 @@ const deleteReview = (reviewId) => {
         });
 }
 
-const btnOpenModalReview = document.getElementById('btn-open-modal-review')
-const modalReview = new bootstrap.Modal(document.getElementById('modal-review'), {
-    keyboard: false
-})
-
-// Button open modal review
-btnOpenModalReview.addEventListener('click',function() {
-    // Open modal
-    modalReview.show();
-    // Change title modal
-    document.getElementById("modal-title").innerHTML = "Write review"
-})
-
-// Reset information review when modal review close
-document.getElementById('modal-review').addEventListener('hidden.bs.modal',function(event) {
-    resetStars();
-    // reset rating value
-    ratingValue.textContent = "";
-    // reset rating content
-    ratingContentEl.value = "";
-    // reset review update
-    reviewIdUpdated = null;
-    // current rating
-    currentRating = 0;
-})
-
 // Button handle review
 const btnHandleReview = document.getElementById('btn-handle-review')
-const ratingContentEl = document.getElementById('rating-content')
 btnHandleReview.addEventListener('click', function() {
     if(reviewIdUpdated) {
         // Update review
@@ -185,7 +188,8 @@ const createReview = () => {
             // Announce user that review was created success
             toastr.success('Create review success')
             // Hide modal review
-            modalReview.hide()
+            modalReview.hide();
+            setTimeout(() => { location.reload() }, 500);
 
             // Add review to reviews list
             reviews.unshift(response.data)
@@ -245,7 +249,8 @@ const updateReview = () => {
             // Announce user that review was created success
             toastr.success('Update review success')
             // Hide modal review
-            modalReview.hide()
+            modalReview.hide();
+            setTimeout(() => { location.reload() }, 500);
 
             // Update review in reviews list
             // Find review by id then replace the old review to new one
