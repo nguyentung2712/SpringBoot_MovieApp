@@ -104,3 +104,13 @@ btnCreate.addEventListener('click', function() {
             toastr.error(error.response.data.message)
         })
 })
+
+function unHidePassword() {
+    if(passwordEl.type === "password" || confirmPasswordEl.type === "password") {
+        passwordEl.type = "text";
+        confirmPasswordEl.type = "text";
+    } else {
+        passwordEl.type = "password";
+        confirmPasswordEl.type = "password";
+    }
+}
