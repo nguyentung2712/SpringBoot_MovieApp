@@ -2,6 +2,7 @@ package com.movie.moviespringboot.service;
 
 import com.movie.moviespringboot.entity.Episode;
 import com.movie.moviespringboot.entity.Movie;
+import com.movie.moviespringboot.exception.BadRequestException;
 import com.movie.moviespringboot.exception.ResourceNotFoundException;
 import com.movie.moviespringboot.model.enums.MovieType;
 import com.movie.moviespringboot.repository.EpisodeRepository;
@@ -34,6 +35,11 @@ public class EpisodeService {
         // Check video upload is existed or not
         Episode episode = episodeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Can not find episode has id is: "+id));
+
+        // Check condition: if not have video to upload
+        if (episode.getVideoURL() == null) {
+            throw new BadRequestException("Don't have video to upload");
+        }
 
         // Upload video
         String videoUrl = videoService.uploadVideo(file);
@@ -172,6 +178,11 @@ public class EpisodeService {
         // Check video is existed or not
         Episode episode = episodeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Can not find episode has is is: "+id));
+
+        // Check condition: If not have video to delete
+        if (episode.getVideoURL() == null) {
+            throw new BadRequestException("Don't have video to delete");
+        }
 
         // Delete file video in video_uploads
         VideoService.deleteVideo(episode.getVideoURL());
