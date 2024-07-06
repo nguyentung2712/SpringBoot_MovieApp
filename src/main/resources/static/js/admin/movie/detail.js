@@ -65,6 +65,20 @@ $('#form-update-movie').validate({
     }
 });
 
+// Year release drop down options
+document.addEventListener('DOMContentLoaded', (event) => {
+    const releaseYearEl = document.getElementById('releaseYear');
+    const currentYear = new Date().getFullYear();
+    const startYear = 1895;
+
+    for (let year = currentYear; year >= startYear; year--) {
+        let option = document.createElement('option');
+        option.value = year;
+        option.text = year;
+        releaseYearEl.appendChild(option);
+    }
+});
+
 // Update movie
 const titleEl = document.getElementById('title');
 const descriptionEl = document.getElementById('description');

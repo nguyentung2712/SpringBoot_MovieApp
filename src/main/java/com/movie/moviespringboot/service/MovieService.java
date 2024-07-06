@@ -2,11 +2,13 @@ package com.movie.moviespringboot.service;
 
 import com.movie.moviespringboot.entity.Episode;
 import com.movie.moviespringboot.entity.Movie;
+import com.movie.moviespringboot.exception.BadRequestException;
 import com.movie.moviespringboot.exception.ResourceNotFoundException;
 import com.movie.moviespringboot.repository.EpisodeRepository;
 import com.movie.moviespringboot.repository.MovieRepository;
 import com.movie.moviespringboot.model.request.UpsertMovieRequest;
 import com.movie.moviespringboot.utils.StringUtils;
+import com.movie.moviespringboot.utils.Validate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,11 @@ public class MovieService {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, request.getReleaseYear());
         Date date = calendar.getTime();
+
+        if (request.getReleaseYear() < 1895) {
+            throw new BadRequestException("Year release must be after or in 1895");
+        }
+
         if(date.before(new Date()) || date.equals(new Date())){
             Movie movie = Movie.builder()
                     .title(request.getTitle())
@@ -80,6 +87,10 @@ public class MovieService {
 
         if (movie.getPoster().equals(StringUtils.generateLinkImage(movie.getTitle())) || movie.getPoster().isEmpty()) {
             movie.setPoster(StringUtils.generateLinkImage(request.getTitle()));
+        }
+
+        if (request.getReleaseYear() < 1895) {
+            throw new BadRequestException("Year release must be after or in 1895");
         }
 
         // Update movie
