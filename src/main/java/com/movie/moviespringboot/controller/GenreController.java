@@ -3,6 +3,7 @@ package com.movie.moviespringboot.controller;
 import com.movie.moviespringboot.entity.Genre;
 import com.movie.moviespringboot.service.GenreService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("admin/genres")
 public class GenreController {
+
+    @Autowired
     private final GenreService genreService;
 
     // Get All Genres

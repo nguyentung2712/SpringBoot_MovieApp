@@ -7,6 +7,7 @@ import com.movie.moviespringboot.service.ReviewService;
 import com.movie.moviespringboot.service.WebService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebController {
 
+    @Autowired
     private final WebService webService;
     private final ReviewService reviewService;
     private final HttpSession httpSession;

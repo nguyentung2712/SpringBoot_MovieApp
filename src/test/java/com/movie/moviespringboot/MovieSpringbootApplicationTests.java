@@ -22,9 +22,7 @@ import java.util.List;
 import java.util.Random;
 
 @SpringBootTest
-class
-
-MovieSpringbootApplicationTests {
+class MovieSpringbootApplicationTests {
 
 	@Autowired
 	private GenreRepository genreRepository;
