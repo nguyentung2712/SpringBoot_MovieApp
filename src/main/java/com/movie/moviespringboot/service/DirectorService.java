@@ -73,7 +73,6 @@ public class DirectorService {
                 throw new BadRequestException("Birthday month must be before or in "+ (new Date().getMonth() + 1));
             }
         }
-
         if (request.getBirthday().getYear() > (new Date().getYear())) {
             throw new BadRequestException("Birthday year must be before or in "+ (new Date().getYear() + 1900));
         }
