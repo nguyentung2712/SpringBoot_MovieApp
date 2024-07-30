@@ -33,6 +33,9 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
+    private final ActorService actorService;
+
+    @Autowired
     private final HttpSession session;
 
     // Get all users
