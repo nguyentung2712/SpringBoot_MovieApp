@@ -100,7 +100,6 @@ public class UserService {
                 throw new BadRequestException("Birthday month must be before or in "+ (new Date().getMonth() + 1));
             }
         }
-
         if (request.getBirthday().getYear() > (new Date().getYear())) {
             throw new BadRequestException("Birthday year must be before or in "+ (new Date().getYear() + 1900));
         }
@@ -110,6 +109,7 @@ public class UserService {
             user.setAvatar(StringUtils.generateLinkImage(request.getName()));
         }
 
+        // Set entity
         user.setName(request.getName());
         user.setBirthday(request.getBirthday());
         user.setGender(request.getGender());
