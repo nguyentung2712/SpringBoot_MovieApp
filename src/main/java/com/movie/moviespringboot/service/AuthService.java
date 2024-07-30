@@ -12,6 +12,7 @@ import com.movie.moviespringboot.utils.Validate;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 // Handle login, register and logout using session
 public class AuthService {
+    @Autowired
     private final UserRepository userRepository;
+
+    @Autowired
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
     private final HttpSession session;
 
     public void login(LoginRequest request) {

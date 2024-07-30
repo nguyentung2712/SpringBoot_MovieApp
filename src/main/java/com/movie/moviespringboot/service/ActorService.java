@@ -9,6 +9,7 @@ import com.movie.moviespringboot.repository.MovieRepository;
 import com.movie.moviespringboot.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +21,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ActorService {
+    @Autowired
     private final ActorRepository actorRepository;
+    @Autowired
     private final MovieRepository movieRepository;
 
     // Get all actors

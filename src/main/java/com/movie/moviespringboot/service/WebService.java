@@ -6,6 +6,7 @@ import com.movie.moviespringboot.model.enums.MovieType;
 import com.movie.moviespringboot.repository.BlogRepository;
 import com.movie.moviespringboot.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,7 +17,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class WebService {
+    @Autowired
     private final MovieRepository movieRepository;
+
+    @Autowired
     private final BlogRepository blogRepository;
 
     // Get movie by id, slug and status

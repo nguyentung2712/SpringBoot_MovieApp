@@ -13,6 +13,7 @@ import com.movie.moviespringboot.repository.UserRepository;
 import com.movie.moviespringboot.model.request.UpsertReviewRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,10 +21,16 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
-
+    @Autowired
     public final UserRepository userRepository;
+
+    @Autowired
     public final MovieRepository movieRepository;
+
+    @Autowired
     public final ReviewRepository reviewRepository;
+
+    @Autowired
     public final HttpSession httpSession;
 
     // get list review by movie id

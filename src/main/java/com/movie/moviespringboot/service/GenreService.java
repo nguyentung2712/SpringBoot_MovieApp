@@ -7,6 +7,7 @@ import com.movie.moviespringboot.repository.GenreRepository;
 import com.movie.moviespringboot.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,7 +17,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class GenreService {
+    @Autowired
     private final GenreRepository genreRepository;
+
+    @Autowired
     private final MovieRepository movieRepository;
 
     // Get all genres - Controller

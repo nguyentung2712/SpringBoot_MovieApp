@@ -9,6 +9,7 @@ import com.movie.moviespringboot.repository.EpisodeRepository;
 import com.movie.moviespringboot.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,8 +21,13 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class EpisodeService {
+    @Autowired
     private final EpisodeRepository episodeRepository;
+
+    @Autowired
     private final VideoService videoService;
+
+    @Autowired
     private final MovieRepository movieRepository;
 
     // Get episode list of movie by id sort by displayOrder increase
